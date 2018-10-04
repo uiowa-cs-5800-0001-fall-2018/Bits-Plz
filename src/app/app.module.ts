@@ -8,6 +8,7 @@ import { AppRoutingModule } from './app-routing.module';
 import { RouterModule } from '@angular/router';
 import { NotFoundComponent } from './not-found/not-found.component';
 import { HomeComponent } from './home/home.component';
+import { BlocklyComponent } from './blockly/blockly.component';
 
 
 @NgModule({
@@ -15,7 +16,8 @@ import { HomeComponent } from './home/home.component';
     AppComponent,
     LoginComponent,
     NotFoundComponent,
-    HomeComponent
+    HomeComponent,
+    BlocklyComponent
   ],
   imports: [
     BrowserModule,
