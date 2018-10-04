@@ -18,7 +18,7 @@ export class HomeComponent implements OnInit {
   constructor() {
     
     // a simple query to fire base real time data base
-    firebase.database().ref('/user/1/user_name').once('value').then(snapshot => {
+    firebase.database().ref('/users/1/user_name').once('value').then(snapshot => {
       this.user_name = snapshot.val()
       console.log(this.user_name)
     })
