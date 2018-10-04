@@ -6,11 +6,11 @@
 export const environment = {
   production: false,
   firebase: {
-    apiKey: "AIzaSyC2z-vNdnhkE6S6T3SDiPnzc_yW_oqM0qI",
-    authDomain: "chat-bot-574d2.firebaseapp.com",
-    databaseURL: "https://chat-bot-574d2.firebaseio.com",
-    projectId: "chat-bot-574d2",
-    storageBucket: "chat-bot-574d2.appspot.com",
-    messagingSenderId: "115249993823"
+    apiKey: "AIzaSyCN7ltBsNVIpK70slDSZX6xzz0uZb_OIqI",
+    authDomain: "business-semantic-analysis.firebaseapp.com",
+    databaseURL: "https://business-semantic-analysis.firebaseio.com",
+    projectId: "business-semantic-analysis",
+    storageBucket: "business-semantic-analysis.appspot.com",
+    messagingSenderId: "823639850004"
   }
 };
