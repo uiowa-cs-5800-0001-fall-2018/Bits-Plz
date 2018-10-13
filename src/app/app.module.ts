@@ -9,6 +9,7 @@ import { RouterModule } from '@angular/router';
 import { NotFoundComponent } from './not-found/not-found.component';
 import { HomeComponent } from './home/home.component';
 import { BlocklyComponent } from './blockly/blockly.component';
+import {FirebaseService} from './services/firebase.service';
 
 
 @NgModule({
@@ -24,7 +25,9 @@ import { BlocklyComponent } from './blockly/blockly.component';
     AppRoutingModule,
     RouterModule
   ],
-  providers: [],
+  providers: [
+    FirebaseService
+  ],
   bootstrap: [AppComponent]
 })
 export class AppModule { }

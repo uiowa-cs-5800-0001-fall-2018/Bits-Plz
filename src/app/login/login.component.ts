@@ -1,82 +1,55 @@
 import { Component, OnInit } from '@angular/core';
 import * as firebaseui from 'firebaseui';
-import * as firebase from 'firebase';
-import { environment } from '../../environments/environment';
-firebase.initializeApp(environment.firebase);
+import {FirebaseService} from '../services/firebase.service';
 
 @Component({
   selector: 'app-login',
   templateUrl: './login.component.html',
   styleUrls: ['./login.component.css']
 })
+
 export class LoginComponent implements OnInit {
 
-  ngOnInit() {
-    // const uiConfig = {
-    //   callbacks: {
-    //     signInSuccessWithAuthResult: function(authResult, redirectUrl) {
-    //       // User successfully signed in.
-    //       // Return type determines whether we continue the redirect automatically
-    //       // or whether we leave that to developer to handle.
-    //       return true;
-    //     },
-    //     uiShown: function() {
-    //       // The widget is rendered.
-    //       // Hide the loader.
-    //       document.getElementById('loader').style.display = 'none';
-    //     }
-    //   },
-    //   // Will use popup for IDP Providers sign-in flow instead of the default, redirect.
-    //   signInFlow: 'popup',
-    //   signInSuccessUrl: '<url-to-redirect-to-on-success>',
-    //   signInOptions: [
-    //     // Leave the lines as is for the providers you want to offer your users.
-    //     firebase.auth.GoogleAuthProvider.PROVIDER_ID,
-    //     firebase.auth.FacebookAuthProvider.PROVIDER_ID,
-    //     firebase.auth.TwitterAuthProvider.PROVIDER_ID,
-    //     firebase.auth.GithubAuthProvider.PROVIDER_ID,
-    //     firebase.auth.EmailAuthProvider.PROVIDER_ID,
-    //     firebase.auth.PhoneAuthProvider.PROVIDER_ID
-    //   ],
-    //   // Terms of service url.
-    //   tosUrl: '<your-tos-url>',
-    //   // Privacy policy url.
-    //   privacyPolicyUrl: '<your-privacy-policy-url>'
-    // };
+  ui: firebaseui.auth.AuthUI;
+  firebase_service: FirebaseService;
+  user_name: String;
+  user_email: String;
 
-    const ui = new firebaseui.auth.AuthUI(firebase.auth());
-    // ui.start('#firebaseui-auth-container', uiConfig);
-    // const uiConfig = {
-    //   callbacks: {
-    //     signInSuccessWithAuthResult: function(authResult, redirectUrl) {
-    //       // User successfully signed in.
-    //       // Return type determines whether we continue the redirect automatically
-    //       // or whether we leave that to developer to handle.
-    //       return true;
-    //     },
-    //     uiShown: function() {
-    //       // The widget is rendered.
-    //       // Hide the loader.
-    //       document.getElementById('loader').style.display = 'none';
-    //     }
-    //   },
-    ui.start('#firebaseui-auth-container', {
-      callbacks: {
-        uiShown: function () {
-          // Hide the loader. The widget is rendered.
-          document.getElementById('loader').style.display = 'none';
-        }
-      },
-      signInSuccessUrl: '/home',
-      signInFlow: 'popup',
-      queryParameterForWidgetMode: 'select',
-      // signInFlow: 'redirect',
-      signInOptions: [
-        firebase.auth.EmailAuthProvider.PROVIDER_ID
-      ],
-      // Other config options...
-    });
+  ngOnInit() {
+    console.log('init started');
+    // if (this.user_name === null) {
+    //   this.ui.start('#firebaseui-auth-container', this.firebase_service.get_config());
+    // }
+    console.log('init finished');
   }
 
-  constructor() {}
+  ngAfterViewInit() {
+    console.log('view_init')
+    if (this.user_name === null) {
+      this.ui.start('#firebaseui-auth-container', this.firebase_service.get_config());
+    }
+  }
+
+  // start_ui(): void {
+  //  this.ui.start('#firebaseui-auth-container', this.firebase_service.get_config());
+  // }
+
+  constructor(firebase_service: FirebaseService) {
+    console.log('constructor started');
+    this.firebase_service = firebase_service;
+    this.ui = firebase_service.get_login_ui();
+    this.user_name = sessionStorage.getItem('user_name');
+    this.user_email = sessionStorage.getItem('user_email');
+    console.log('constructor finished');
+  }
+
+  // login(): void {
+  //  this.ui.start('#firebaseui-auth-container', this.firebase_service.get_config());
+  // }
+
+  logout(): void {
+    sessionStorage.clear();
+    this.user_name = undefined;
+    this.user_email = undefined;
+  }
 }
