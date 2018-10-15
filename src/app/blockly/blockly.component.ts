@@ -1,4 +1,5 @@
 import { Component, OnInit } from '@angular/core';
+import { FlashMessagesService } from 'ngx-flash-messages';
 
 declare var Blockly: any;
 
@@ -9,6 +10,8 @@ declare var Blockly: any;
 })
 
 export class BlocklyComponent implements OnInit {
+
+  constructor (private flashMessagesService: FlashMessagesService) { }
 
   public toolbox: string =
     `<xml xmlns="http://www.w3.org/1999/xhtml" id="toolbox" style="display: none;">
@@ -379,5 +382,12 @@ export class BlocklyComponent implements OnInit {
     let workspacePlayground = Blockly.inject('blocklyDiv',
       { toolbox: this.toolbox });
     return workspacePlayground;
+  }
+
+  save_worksapce(): void {
+    this.flashMessagesService.show('save feature is not yet implemented!', {
+      classes: ['alert', 'alert-warning'], // You can pass as many classes as you need
+      timeout: 10000, // Default is 3000
+    });
   }
 }

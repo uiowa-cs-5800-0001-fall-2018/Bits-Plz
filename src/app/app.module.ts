@@ -9,8 +9,9 @@ import { RouterModule } from '@angular/router';
 import { NotFoundComponent } from './not-found/not-found.component';
 import { HomeComponent } from './home/home.component';
 import { BlocklyComponent } from './blockly/blockly.component';
-import {FirebaseService} from './services/firebase.service';
+import { FirebaseService } from './services/firebase.service';
 
+import { FlashMessagesModule } from 'ngx-flash-messages';
 
 @NgModule({
   declarations: [
@@ -23,7 +24,8 @@ import {FirebaseService} from './services/firebase.service';
   imports: [
     BrowserModule,
     AppRoutingModule,
-    RouterModule
+    RouterModule,
+    FlashMessagesModule
   ],
   providers: [
     FirebaseService
