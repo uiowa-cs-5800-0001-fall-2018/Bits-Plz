@@ -383,9 +383,16 @@ export class BlocklyComponent implements OnInit {
   }
 
   save_worksapce(): void {
-    this.flashMessagesService.show('save feature is not yet implemented!', {
-      classes: ['alert', 'alert-warning'], // You can pass as many classes as you need
-      timeout: 10000, // Default is 3000
-    });
+    const msg_success = 'save feature is not yet implemented!\nbut you are logged in';
+    const msg_fail = 'you can\'t save if you are not logged in\nalso not implemented';
+    if (sessionStorage.getItem('user_name')) {
+      this.flashMessagesService.show(msg_success , {
+        timeout: 10000, // Default is 3000
+      });
+    } else {
+      this.flashMessagesService.show(msg_fail, {
+        timeout: 10000, // Default is 3000
+      });
+    }
   }
 }
