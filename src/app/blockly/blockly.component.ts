@@ -1,5 +1,5 @@
-import { Component, OnInit } from '@angular/core';
-import { FlashMessagesService } from 'ngx-flash-messages';
+import {Component, OnInit} from '@angular/core';
+import {FlashMessagesService} from 'ngx-flash-messages';
 
 declare var Blockly: any;
 
@@ -13,7 +13,7 @@ export class BlocklyComponent implements OnInit {
 
   constructor (private flashMessagesService: FlashMessagesService) { }
 
-  public toolbox: string =
+  public toolbox =
     `<xml xmlns="http://www.w3.org/1999/xhtml" id="toolbox" style="display: none;">
     <category name="Logic" colour="#5C81A6">
         <block type="controls_if"></block>
@@ -379,9 +379,7 @@ export class BlocklyComponent implements OnInit {
   }
 
   createBlocks() {
-    let workspacePlayground = Blockly.inject('blocklyDiv',
-      { toolbox: this.toolbox });
-    return workspacePlayground;
+    return Blockly.inject('blocklyDiv', {toolbox: this.toolbox});
   }
 
   save_worksapce(): void {
