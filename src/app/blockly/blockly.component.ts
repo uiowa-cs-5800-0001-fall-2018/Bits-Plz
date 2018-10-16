@@ -1,5 +1,6 @@
-import { Component, OnInit } from '@angular/core';
-import { FlashMessagesService } from 'ngx-flash-messages';
+import {Component, OnInit} from '@angular/core';
+import {FlashMessagesService} from 'ngx-flash-messages';
+import {FirebaseService} from '../services/firebase.service';
 
 declare var Blockly: any;
 
@@ -11,9 +12,13 @@ declare var Blockly: any;
 
 export class BlocklyComponent implements OnInit {
 
-  constructor (private flashMessagesService: FlashMessagesService) { }
+  constructor(
+    private flashMessagesService: FlashMessagesService,
+    private firebaseService: FirebaseService
+  ) {
+  }
 
-  public toolbox: string =
+  public toolbox =
     `<xml xmlns="http://www.w3.org/1999/xhtml" id="toolbox" style="display: none;">
     <category name="Logic" colour="#5C81A6">
         <block type="controls_if"></block>
@@ -379,15 +384,37 @@ export class BlocklyComponent implements OnInit {
   }
 
   createBlocks() {
-    let workspacePlayground = Blockly.inject('blocklyDiv',
-      { toolbox: this.toolbox });
-    return workspacePlayground;
+    return Blockly.inject('blocklyDiv', {toolbox: this.toolbox});
   }
 
   save_worksapce(): void {
-    this.flashMessagesService.show('save feature is not yet implemented!', {
-      classes: ['alert', 'alert-warning'], // You can pass as many classes as you need
-      timeout: 10000, // Default is 3000
-    });
+    const msg_success = 'successfully saved current workspace!';
+    const msg_fail = 'you need to login first';
+    const user_name = sessionStorage.getItem('user_name');
+    if (user_name) {
+      const xml = Blockly.Xml.workspaceToDom(Blockly.mainWorkspace);
+      this.firebaseService.database().ref(user_name).set({
+        saved_workspace: Blockly.Xml.domToText(xml)
+      }).then(() => this.flashMessagesService.show(msg_success, {timeout: 10000}));
+    } else {
+      this.flashMessagesService.show(msg_fail, {timeout: 10000});
+    }
+  }
+
+  restore_workspace(): void {
+    const msg_success = 'successfully restored last saved workspace!';
+    const msg_fail = 'you need to login first';
+    const user_name = sessionStorage.getItem('user_name');
+    if (user_name) {
+      Blockly.mainWorkspace.clear();
+      this.firebaseService.database().ref(user_name + '/saved_workspace')
+        .on('value', xml_text_snapshot => {
+          const dom = Blockly.Xml.textToDom(xml_text_snapshot.val());
+          Blockly.Xml.domToWorkspace(Blockly.mainWorkspace, dom);
+          this.flashMessagesService.show(msg_success, {timeout: 10000});
+        });
+    } else {
+      this.flashMessagesService.show(msg_fail, {timeout: 10000});
+    }
   }
 }
