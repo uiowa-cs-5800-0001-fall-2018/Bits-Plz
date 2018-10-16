@@ -36,4 +36,8 @@ export class FirebaseService {
     }
     return this.ui;
   }
+
+  database() {
+    return firebase.database();
+  }
 }

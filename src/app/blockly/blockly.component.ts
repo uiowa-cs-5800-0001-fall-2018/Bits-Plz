@@ -1,5 +1,6 @@
 import {Component, OnInit} from '@angular/core';
 import {FlashMessagesService} from 'ngx-flash-messages';
+import {FirebaseService} from '../services/firebase.service';
 
 declare var Blockly: any;
 
@@ -11,7 +12,11 @@ declare var Blockly: any;
 
 export class BlocklyComponent implements OnInit {
 
-  constructor (private flashMessagesService: FlashMessagesService) { }
+  constructor(
+    private flashMessagesService: FlashMessagesService,
+    private firebaseService: FirebaseService
+  ) {
+  }
 
   public toolbox =
     `<xml xmlns="http://www.w3.org/1999/xhtml" id="toolbox" style="display: none;">
@@ -383,16 +388,16 @@ export class BlocklyComponent implements OnInit {
   }
 
   save_worksapce(): void {
-    const msg_success = 'save feature is not yet implemented!\nbut you are logged in';
+    const msg_success = 'successfully saved current workspace!';
     const msg_fail = 'you can\'t save if you are not logged in\nalso not implemented';
-    if (sessionStorage.getItem('user_name')) {
-      this.flashMessagesService.show(msg_success , {
-        timeout: 10000, // Default is 3000
-      });
+    const user_name = sessionStorage.getItem('user_name');
+    if (user_name) {
+      const xml = Blockly.Xml.workspaceToDom(Blockly.mainWorkspace);
+      this.firebaseService.database().ref(user_name).set({
+        saved_workspace: Blockly.Xml.domToText(xml)
+      }).then(() => this.flashMessagesService.show(msg_success, {timeout: 10000}));
     } else {
-      this.flashMessagesService.show(msg_fail, {
-        timeout: 10000, // Default is 3000
-      });
+      this.flashMessagesService.show(msg_fail, {timeout: 10000});
     }
   }
 }
