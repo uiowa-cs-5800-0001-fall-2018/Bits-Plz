@@ -1,8 +1,12 @@
 import {Component, OnInit} from '@angular/core';
 import {FlashMessagesService} from 'ngx-flash-messages';
 import {FirebaseService} from '../services/firebase.service';
-
+import {CQLContext} from './cql-context';
+import {CQLLogic} from './cql-logic';
+import {CQLValues} from './cql-values';
+//import {FirebaseService} from '../services/firebase.service';
 declare var Blockly: any;
+import { CQLBlocks } from './cql-blocks';
 
 @Component({
   selector: 'app-blockly',
@@ -376,14 +380,33 @@ export class BlocklyComponent implements OnInit {
     <sep></sep>
     <category name="Variables" colour="#A65C81" custom="VARIABLE"></category>
     <category name="Functions" colour="#9A5CA6" custom="PROCEDURE"></category>
+    <sep></sep>
+    <category name="Reports" colour="#5C81A6">
+        <block type="report"></block>
+        <block type="data"></block>
+        <block type="twitter"></block>
+        <block type="sentient_analysis"></block>
+        <block type="graph"></block>
+        <block type="table"></block>
+        <block type="alert"></block>
+        <block type="text"></block>
+    </category>
 </xml>`;
 
+  // Initialize the editor
+  public static initBlocks() {
+    // initialize the blocks
+    CQLValues.initBlocks();
+    CQLLogic.initBlocks();
+    CQLContext.initBlocks();
+  }
 
   ngOnInit() {
     this.createBlocks();
   }
 
   createBlocks() {
+    BlocklyComponent.initBlocks()
     return Blockly.inject('blocklyDiv', {toolbox: this.toolbox});
   }
 
