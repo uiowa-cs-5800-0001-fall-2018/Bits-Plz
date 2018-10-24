@@ -1,3 +1,19 @@
 <div id="blocklyDiv" style="height: 520px; width: 1200px;"></div>
 <button (click)="save_worksapce()">Save My Workspace!</button>
 <button (click)="restore_workspace()">Restore Last Saved Workspace!</button>
+<button (click)="test()">CLEAR TEST</button>
+<script>
+  var demoWorkspace = Blockly.inject('blocklyDiv',
+    {media: '../../media/',
+      toolbox: document.getElementById('toolbox')});
+  Blockly.Xml.domToWorkspace(document.getElementById('startBlocks'),
+    demoWorkspace);
+  function showCode()
+  {
+    // Generate JavaScript code and display it.
+    Blockly.JavaScript.INFINITE_LOOP_TRAP = null;
+    var code = Blockly.JavaScript.workspaceToCode(mainWorkspace);
+    //alert(code);
+    alert("Test");
+  }
+</script>

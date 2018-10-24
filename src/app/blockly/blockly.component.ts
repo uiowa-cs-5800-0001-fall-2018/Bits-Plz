@@ -4,7 +4,6 @@ import {FirebaseService} from '../services/firebase.service';
 import {CQLContext} from './cql-context';
 import {CQLLogic} from './cql-logic';
 import {CQLValues} from './cql-values';
-//import {FirebaseService} from '../services/firebase.service';
 declare var Blockly: any;
 import { CQLBlocks } from './cql-blocks';
 
@@ -439,5 +438,32 @@ export class BlocklyComponent implements OnInit {
     } else {
       this.flashMessagesService.show(msg_fail, {timeout: 10000});
     }
+  }
+  test(): void {
+    var demoWorkspace = Blockly.inject('blocklyDiv',
+      {media: '../../media/',
+        toolbox: document.getElementById('toolbox')});
+    Blockly.Xml.domToWorkspace(document.getElementById('startBlocks'),
+      demoWorkspace);
+      // Generate JavaScript code and display it.
+      Blockly.JavaScript.INFINITE_LOOP_TRAP = null;
+      var code = Blockly.JavaScript.workspaceToCode(Blockly.mainWorkspace);
+      alert(code);
+
+
+    //const msg_success = 'successfully restored last saved workspace!';
+    //const msg_fail = 'you need to login first';
+    //const user_name = sessionStorage.getItem('user_name');
+    //if (user_name) {
+      //Blockly.mainWorkspace.clear();
+      //this.firebaseService.database().ref(user_name + '/saved_workspace')
+        //.on('value', xml_text_snapshot => {
+         // const dom = Blockly.Xml.textToDom(xml_text_snapshot.val());
+          //Blockly.Xml.domToWorkspace(Blockly.mainWorkspace, dom);
+          //this.flashMessagesService.show(msg_success, {timeout: 10000});
+        //});
+    //} else {
+      //this.flashMessagesService.show(msg_fail, {timeout: 10000});
+    //}
   }
 }
