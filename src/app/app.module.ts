@@ -10,6 +10,7 @@ import { NotFoundComponent } from './not-found/not-found.component';
 import { HomeComponent } from './home/home.component';
 import { BlocklyComponent } from './blockly/blockly.component';
 import { FirebaseService } from './services/firebase.service';
+import { TwitterService } from './services/twitter.service';
 
 import { FlashMessagesModule } from 'ngx-flash-messages';
 
@@ -28,7 +29,8 @@ import { FlashMessagesModule } from 'ngx-flash-messages';
     FlashMessagesModule
   ],
   providers: [
-    FirebaseService
+    FirebaseService,
+    TwitterService
   ],
   bootstrap: [AppComponent]
 })
