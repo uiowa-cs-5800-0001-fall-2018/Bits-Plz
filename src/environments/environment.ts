@@ -6,11 +6,11 @@
 export const environment = {
   production: false,
   firebase: {
-    apiKey: "AIzaSyCN7ltBsNVIpK70slDSZX6xzz0uZb_OIqI",
-    authDomain: "business-semantic-analysis.firebaseapp.com",
-    databaseURL: "https://business-semantic-analysis.firebaseio.com",
-    projectId: "business-semantic-analysis",
-    storageBucket: "business-semantic-analysis.appspot.com",
-    messagingSenderId: "823639850004"
+    apiKey: 'AIzaSyCN7ltBsNVIpK70slDSZX6xzz0uZb_OIqI',
+    authDomain: 'business-semantic-analysis.firebaseapp.com',
+    databaseURL: 'https://business-semantic-analysis.firebaseio.com',
+    projectId: 'business-semantic-analysis',
+    storageBucket: 'business-semantic-analysis.appspot.com',
+    messagingSenderId: '823639850004'
   }
 };
