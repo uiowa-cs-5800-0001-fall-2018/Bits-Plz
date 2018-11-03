@@ -7,19 +7,7 @@ import {Observable} from 'rxjs/Observable';
 @Injectable()
 export class TwitterService {
 
-  constructor() { }
-
-  public get_tweets(): Observable<InputEntryModel[]> {
-    const post_str = 'https://bits-plz-backend.herokuapp.com/search';
-    return new Observable(ob => {
-      request.post(post_str, (error, response, body) => { // 'body': string is the actual content
-        ob.next(this.parse_response(parseJson(body)));
-        if (error != null) { ob.error(error); }
-      }).then(() => { ob.complete(); });
-    });
-  }
-
-  private parse_response(raw): InputEntryModel[] {
+  private static parse_response(raw): InputEntryModel[] {
     const tweet_list: InputEntryModel[] = [];
     for (const tweet of raw.statuses) {
       tweet_list.push({
@@ -31,4 +19,18 @@ export class TwitterService {
     }
     return tweet_list;
   }
+
+  constructor() { }
+
+  public get_tweets(): Observable<InputEntryModel[]> {
+    const post_str = 'https://bits-plz-backend.herokuapp.com/search';
+    return new Observable(ob => {
+      request.post(post_str, (error, response, body) => { // 'body': string is the actual content
+        ob.next(TwitterService.parse_response(parseJson(body)));
+        if (error != null) { ob.error(error); }
+      }).then(() => { ob.complete(); });
+    });
+  }
+
+
 }
