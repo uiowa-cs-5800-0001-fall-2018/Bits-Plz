@@ -1,5 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import * as firebase from 'firebase';
+import {TwitterService} from '../services/twitter.service';
 
 // the following two lines required for firebase real time database
 // import { environment } from '../../environments/environment';
@@ -17,7 +18,7 @@ export class HomeComponent implements OnInit {
   user_name: String;
   user_email: String;
 
-  constructor() {
+  constructor(twitterService: TwitterService) {
     this.user_name = sessionStorage.getItem('user_name');
     this.user_email = sessionStorage.getItem('user_email');
     if (this.user_name == null) {
