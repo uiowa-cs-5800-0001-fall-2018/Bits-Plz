@@ -7,11 +7,7 @@ import {Observable} from 'rxjs/Observable';
 @Injectable()
 export class TwitterService {
 
-  constructor() {
-    this.get_tweets().subscribe({
-      next: tweets => console.log(tweets)
-    });
-  }
+  constructor() { }
 
   public get_tweets(): Observable<InputEntryModel[]> {
     const post_str = 'https://bits-plz-backend.herokuapp.com/search';
