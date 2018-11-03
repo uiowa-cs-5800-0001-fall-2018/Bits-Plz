@@ -1,27 +1,38 @@
 import { Injectable } from '@angular/core';
 import * as request from 'request-promise-native';
 import { InputEntryModel } from './inputEntry.model';
-
+import * as parseJson from 'parse-json';
+import {Observable} from 'rxjs/Observable';
 
 @Injectable()
 export class TwitterService {
 
   constructor() {
-    const post_str = 'https://bits-plz-backend.herokuapp.com/search';
-
-    console.log('request starting');
-    request.post(post_str, (error, response, body) => { // 'response' is the actual content
-      console.log('error:', error);
-      console.log('statusCode:', response && response.statusCode);
-      console.log('body:', body); // Print the HTML of the response
-      console.log('body type', typeof body);
-    }).then(() => {
-      console.log('request finished');
+    this.get_tweets().subscribe({
+      next: tweets => console.log(tweets)
     });
   }
 
-  parse_response(raw: string): InputEntryModel[] {
-    return null;
+  public get_tweets(): Observable<InputEntryModel[]> {
+    const post_str = 'https://bits-plz-backend.herokuapp.com/search';
+    return new Observable(ob => {
+      request.post(post_str, (error, response, body) => { // 'body': string is the actual content
+        ob.next(this.parse_response(parseJson(body)));
+        if (error != null) { ob.error(error); }
+      }).then(() => { ob.complete(); });
+    });
   }
 
+  private parse_response(raw): InputEntryModel[] {
+    const tweet_list: InputEntryModel[] = [];
+    for (const tweet of raw.statuses) {
+      tweet_list.push({
+        title: null,
+        region: tweet.user.location === '' ? null : tweet.user.location,
+        time: tweet.created_at,
+        content: tweet.text
+      });
+    }
+    return tweet_list;
+  }
 }
