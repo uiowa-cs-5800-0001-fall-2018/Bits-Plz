@@ -1,14 +1,14 @@
 import { Injectable } from '@angular/core';
 import * as request from 'request-promise-native';
-import { InputEntryModel } from './inputEntry.model';
+import { ResultModel } from './result.model';
 import * as parseJson from 'parse-json';
 import {Observable} from 'rxjs/Observable';
 
 @Injectable()
 export class TwitterService {
 
-  private static parse_response(raw): InputEntryModel[] {
-    const tweet_list: InputEntryModel[] = [];
+  private static parse_response(raw): ResultModel[] {
+    const tweet_list: ResultModel[] = [];
     for (const tweet of raw.statuses) {
       tweet_list.push({
         title: null,
@@ -22,7 +22,7 @@ export class TwitterService {
 
   constructor() { }
 
-  public get_tweets(): Observable<InputEntryModel[]> {
+  public get_tweets(): Observable<ResultModel[]> {
     const post_str = 'https://bits-plz-backend.herokuapp.com/search';
     return new Observable(ob => {
       request.post(post_str, (error, response, body) => { // 'body': string is the actual content

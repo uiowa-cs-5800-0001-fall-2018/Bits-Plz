@@ -13,6 +13,7 @@ import { FirebaseService } from './services/firebase.service';
 import { TwitterService } from './services/twitter.service';
 
 import { FlashMessagesModule } from 'ngx-flash-messages';
+import { ResultDisplayComponent } from './result-display/result-display.component';
 
 @NgModule({
   declarations: [
@@ -20,7 +21,8 @@ import { FlashMessagesModule } from 'ngx-flash-messages';
     LoginComponent,
     NotFoundComponent,
     HomeComponent,
-    BlocklyComponent
+    BlocklyComponent,
+    ResultDisplayComponent
   ],
   imports: [
     BrowserModule,
