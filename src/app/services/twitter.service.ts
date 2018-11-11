@@ -14,7 +14,8 @@ export class TwitterService {
         title: null,
         region: tweet.user.location === '' ? null : tweet.user.location,
         time: tweet.created_at,
-        content: tweet.text
+        content: tweet.text,
+        score: 0
       });
     }
     return tweet_list;

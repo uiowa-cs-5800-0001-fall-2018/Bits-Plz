@@ -1,6 +1,11 @@
 import { Component, OnInit } from '@angular/core';
 import { ResultModel } from '../services/result.model';
 
+// declare var require: any;
+// const echarts = require('echarts');
+
+import * as echarts from 'echarts';
+
 @Component({
   selector: 'app-result-display',
   templateUrl: './result-display.component.html',
@@ -32,5 +37,21 @@ export class ResultDisplayComponent implements OnInit {
   }
 
   ngOnInit() {
+    const myChart = echarts.init(document.getElementById('main'));
+    myChart.setOption({
+      title: {
+        text: 'Sentiment Analysis Results'
+      },
+      tooltip: {},
+      xAxis: {
+        data: ['positive', 'negative']
+      },
+      yAxis: {},
+      series: [{
+        name: 'number of tweets',
+        type: 'bar',
+        data: [10, 20]
+      }]
+    });
   }
 }
