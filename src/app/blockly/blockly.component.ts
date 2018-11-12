@@ -48,36 +48,34 @@ export class BlocklyComponent implements OnInit {
     BlocksService.inject_blocks('blocklyDiv');
   }
 
-  // save_worksapce(): void {
-  //   const msg_success = 'successfully saved current workspace!';
-  //   const msg_fail = 'you need to login first';
-  //   const user_name = sessionStorage.getItem('user_name');
-  //   if (user_name) {
-  //     const xml = Blockly.Xml.workspaceToDom(Blockly.mainWorkspace);
-  //     this.firebaseService.database().ref(user_name).set({
-  //       saved_workspace: Blockly.Xml.domToText(xml)
-  //     }).then(() => this.flashMessagesService.show(msg_success, {timeout: 10000}));
-  //   } else {
-  //     this.flashMessagesService.show(msg_fail, {timeout: 10000});
-  //   }
-  // }
-  //
-  // restore_workspace(): void {
-  //   const msg_success = 'successfully restored last saved workspace!';
-  //   const msg_fail = 'you need to login first';
-  //   const user_name = sessionStorage.getItem('user_name');
-  //   if (user_name) {
-  //     Blockly.mainWorkspace.clear();
-  //     this.firebaseService.database().ref(user_name + '/saved_workspace')
-  //       .on('value', xml_text_snapshot => {
-  //         const dom = Blockly.Xml.textToDom(xml_text_snapshot.val());
-  //         Blockly.Xml.domToWorkspace(Blockly.mainWorkspace, dom);
-  //         this.flashMessagesService.show(msg_success, {timeout: 10000});
-  //       });
-  //   } else {
-  //     this.flashMessagesService.show(msg_fail, {timeout: 10000});
-  //   }
-  // }
+  save_worksapce(): void {
+    const msg_success = 'successfully saved current workspace!';
+    const msg_fail = 'you need to login first';
+    const user_name = sessionStorage.getItem('user_name');
+    if (user_name) {
+      this.firebaseService.database().ref(user_name).set({
+        saved_workspace: BlocksService.workspace_to_xml_string()
+      }).then(() => this.flashMessagesService.show(msg_success, {timeout: 10000}));
+    } else {
+      this.flashMessagesService.show(msg_fail, {timeout: 10000});
+    }
+  }
+
+  restore_workspace(): void {
+    const msg_success = 'successfully restored last saved workspace!';
+    const msg_fail = 'you need to login first';
+    const user_name = sessionStorage.getItem('user_name');
+    if (user_name) {
+
+      this.firebaseService.database().ref(user_name + '/saved_workspace')
+        .on('value', xml_text_snapshot => {
+          BlocksService.xml_string_to_workspace(xml_text_snapshot.val());
+          this.flashMessagesService.show(msg_success, {timeout: 10000});
+        });
+    } else {
+      this.flashMessagesService.show(msg_fail, {timeout: 10000});
+    }
+  }
 
 
 

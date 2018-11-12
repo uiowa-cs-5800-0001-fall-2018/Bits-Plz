@@ -79,9 +79,18 @@ export class BlocksService {
     };
   }
 
-  static inject_blocks(div_name: string) {
+  public static inject_blocks(div_name: string) {
     BlocksService.gen_blocks();
     // noinspection TypeScriptValidateJSTypes
     Blockly.inject(div_name, {toolbox: BlocksService.gen_tool_box()});
+  }
+
+  public static workspace_to_xml_string(): string {
+    return Blockly.Xml.domToText(Blockly.Xml.workspaceToDom(Blockly.mainWorkspace));
+  }
+
+  public static xml_string_to_workspace(xml_string: string): void {
+    Blockly.mainWorkspace.clear();
+    Blockly.Xml.domToWorkspace(Blockly.mainWorkspace, Blockly.Xml.textToDom(xml_string));
   }
 }
