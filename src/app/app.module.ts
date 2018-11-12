@@ -14,6 +14,7 @@ import { TwitterService } from './services/twitter.service';
 
 import { FlashMessagesModule } from 'ngx-flash-messages';
 import { ResultDisplayComponent } from './result-display/result-display.component';
+import {BlocksService} from './blocks.service';
 
 @NgModule({
   declarations: [
@@ -32,7 +33,8 @@ import { ResultDisplayComponent } from './result-display/result-display.componen
   ],
   providers: [
     FirebaseService,
-    TwitterService
+    TwitterService,
+    BlocksService
   ],
   bootstrap: [AppComponent]
 })
