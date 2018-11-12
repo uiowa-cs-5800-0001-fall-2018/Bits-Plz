@@ -36,7 +36,6 @@ export class BlocklyComponent implements OnInit {
         neutral++;
       }
     }
-    console.log('updated, positive: ', positive, ', negative: ', negative, 'neutral: ', neutral);
     return {
       positive: positive,
       negative: negative,
@@ -77,8 +76,6 @@ export class BlocklyComponent implements OnInit {
     }
   }
 
-
-
   @ViewChild(ResultDisplayComponent)
   set resultDisplayComponent (resultDisplay: ResultDisplayComponent) {
     this.resultDisplay = resultDisplay;
@@ -87,9 +84,6 @@ export class BlocklyComponent implements OnInit {
   run_query(): void {
     this.twitterService.get_tweets().subscribe({
       next: x => {
-        console.log(typeof x);
-        console.log(x);
-        console.log(x.length);
         const distribution = BlocklyComponent.calc_distribution(x);
         this.resultDisplay.update_contents(
           distribution.positive,
