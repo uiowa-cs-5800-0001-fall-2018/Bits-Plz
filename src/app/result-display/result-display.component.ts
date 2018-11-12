@@ -26,7 +26,7 @@ export class ResultDisplayComponent implements OnInit {
       series: [{
         name: 'number of tweets',
         type: 'bar',
-        data: [10, 20, 30]
+        data: []
       }]
     });
   }
