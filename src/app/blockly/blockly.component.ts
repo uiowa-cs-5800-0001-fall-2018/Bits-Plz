@@ -20,7 +20,6 @@ export class BlocklyComponent implements OnInit {
     private flashMessagesService: FlashMessagesService,
     private firebaseService: FirebaseService,
     private twitterService: TwitterService,
-    private blocksService: BlocksService
   ) {
   }
 
@@ -46,7 +45,7 @@ export class BlocklyComponent implements OnInit {
   }
 
   ngOnInit() {
-    this.blocksService.inject_blocks('blocklyDiv');
+    BlocksService.inject_blocks('blocklyDiv');
   }
 
   // save_worksapce(): void {
