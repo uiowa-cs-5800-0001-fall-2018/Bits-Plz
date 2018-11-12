@@ -339,46 +339,6 @@ export class BlocklyComponent implements OnInit {
             <field name="DIRECTION">1</field>
         </block>
     </category>
-    <category name="Colour" colour="#A6745C">
-        <block type="colour_picker">
-            <field name="COLOUR">#ff0000</field>
-        </block>
-        <block type="colour_random"></block>
-        <block type="colour_rgb">
-            <value name="RED">
-                <shadow type="math_number">
-                    <field name="NUM">100</field>
-                </shadow>
-            </value>
-            <value name="GREEN">
-                <shadow type="math_number">
-                    <field name="NUM">50</field>
-                </shadow>
-            </value>
-            <value name="BLUE">
-                <shadow type="math_number">
-                    <field name="NUM">0</field>
-                </shadow>
-            </value>
-        </block>
-        <block type="colour_blend">
-            <value name="COLOUR1">
-                <shadow type="colour_picker">
-                    <field name="COLOUR">#ff0000</field>
-                </shadow>
-            </value>
-            <value name="COLOUR2">
-                <shadow type="colour_picker">
-                    <field name="COLOUR">#3333ff</field>
-                </shadow>
-            </value>
-            <value name="RATIO">
-                <shadow type="math_number">
-                    <field name="NUM">0.5</field>
-                </shadow>
-            </value>
-        </block>
-    </category>
     <sep></sep>
     <category name="Variables" colour="#A65C81" custom="VARIABLE"></category>
     <category name="Functions" colour="#9A5CA6" custom="PROCEDURE"></category>
