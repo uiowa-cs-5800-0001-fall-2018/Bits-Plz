@@ -1,7 +1,7 @@
-<xml xmlns="http://www.w3.org/1999/xhtml"><block type="factory_base" id="oBBpZM0YVi#]lHg1A)ho" deletable="false" movable="false" x="10" y="10">
+<xml xmlns="http://www.w3.org/1999/xhtml"><block type="factory_base" id="gkdZD[F,l6)$[)I?o_8Q" deletable="false" movable="false" x="10" y="10">
     <mutation connections="LEFT"></mutation>
-    <field name="NAME">data_sources</field>
-    <field name="INLINE">AUTO</field>
+    <field name="NAME">data sources</field>
+    <field name="INLINE">EXT</field>
     <field name="CONNECTIONS">LEFT</field>
     <statement name="INPUTS">
       <block type="input_dummy" id=";,3`q|`aGV.=9]sKe#|l">
@@ -77,132 +77,88 @@
                         </next>
                       </block>
                     </statement>
-                  </block>
-                </next>
-              </block>
-            </next>
-          </block>
-        </next>
-      </block>
-    </statement>
-    <value name="TOOLTIP">
-      <block type="text" id="H^^9HrZ:#|/PhO,w-_~1" deletable="false" movable="false">
-        <field name="TEXT">check the data sources to be included in the query</field>
-      </block>
-    </value>
-    <value name="HELPURL">
-      <block type="text" id="r1ULi]*0%*?J%`p;8Xg3" deletable="false" movable="false">
-        <field name="TEXT"></field>
-      </block>
-    </value>
-    <value name="OUTPUTTYPE">
-      <shadow type="type_null" id="%@3A!/Z]@:m8Ty*||B,g"></shadow>
-      <block type="type_other" id="zM~QC3b;u}@$^E,asO?[">
-        <field name="TYPE">string array</field>
-      </block>
-    </value>
-    <value name="COLOUR">
-      <block type="colour_hue" id="9Ok5Nv4yDLMmFLA.ga{%">
-        <mutation colour="#5b67a5"></mutation>
-        <field name="HUE">230</field>
-      </block>
-    </value>
-  </block><block type="factory_base" id="gkdZD[F,l6)$[)I?o_8Q" deletable="false" movable="false" x="10" y="10">
-    <mutation connections="LEFT"></mutation>
-    <field name="NAME">query</field>
-    <field name="INLINE">EXT</field>
-    <field name="CONNECTIONS">LEFT</field>
-    <statement name="INPUTS">
-      <block type="input_value" id="5/GFof7c33XLDo)9X5Nr">
-        <field name="INPUTNAME">data_sources</field>
-        <field name="ALIGN">LEFT</field>
-        <statement name="FIELDS">
-          <block type="field_static" id="AwsXF5n;mlVN|)QmZ(:X">
-            <field name="TEXT">data_sources</field>
-          </block>
-        </statement>
-        <value name="TYPE">
-          <shadow type="type_null" id="S@xmZeUS5Uwxq9{XP%u@"></shadow>
-          <block type="type_other" id="gh*]m/#i{u{`D#1#+04H">
-            <field name="TYPE">string array</field>
-          </block>
-        </value>
-        <next>
-          <block type="input_dummy" id="Z*54v[mke~w`qHF,WAh?">
-            <field name="ALIGN">LEFT</field>
-            <statement name="FIELDS">
-              <block type="field_static" id="i1J_$fW=:H@n0j]sY[^B">
-                <field name="TEXT">key_word: </field>
-                <next>
-                  <block type="field_input" id="*~?))%nXEV{B:%(cF#i#">
-                    <field name="TEXT">default</field>
-                    <field name="FIELDNAME">key_word</field>
-                  </block>
-                </next>
-              </block>
-            </statement>
-            <next>
-              <block type="input_dummy" id="o?/fDlt~tcMzhZCkBFyb">
-                <field name="ALIGN">LEFT</field>
-                <statement name="FIELDS">
-                  <block type="field_static" id="eUb?%73hGx8};m8oR,vI">
-                    <field name="TEXT">#entries from each source: </field>
                     <next>
-                      <block type="field_number" id="{05_iHV@mx$5^/jBl8zs">
-                        <field name="VALUE">0</field>
-                        <field name="FIELDNAME">num_entries</field>
-                        <field name="MIN">0</field>
-                        <field name="MAX">100</field>
-                        <field name="PRECISION">1</field>
-                      </block>
-                    </next>
-                  </block>
-                </statement>
-                <next>
-                  <block type="input_dummy" id="w155p+G;Nuht,E]B3E+^">
-                    <field name="ALIGN">LEFT</field>
-                    <statement name="FIELDS">
-                      <block type="field_static" id="x=2P/pb;I2REddcaG!#`">
-                        <field name="TEXT">within</field>
-                        <next>
-                          <block type="field_number" id="-Sf.2GJuXtqWvcdz+rP]">
-                            <field name="VALUE">0</field>
-                            <field name="FIELDNAME">radius</field>
-                            <field name="MIN">0</field>
-                            <field name="MAX">Infinity</field>
-                            <field name="PRECISION">0</field>
+                      <block type="input_dummy" id="Z*54v[mke~w`qHF,WAh?">
+                        <field name="ALIGN">RIGHT</field>
+                        <statement name="FIELDS">
+                          <block type="field_static" id="i1J_$fW=:H@n0j]sY[^B">
+                            <field name="TEXT">key_word: </field>
                             <next>
-                              <block type="field_static" id="L3BN)b5,JYcm%!+]K_8*">
-                                <field name="TEXT">miles of latitude</field>
+                              <block type="field_input" id="*~?))%nXEV{B:%(cF#i#">
+                                <field name="TEXT">default</field>
+                                <field name="FIELDNAME">key_word</field>
+                              </block>
+                            </next>
+                          </block>
+                        </statement>
+                        <next>
+                          <block type="input_dummy" id="o?/fDlt~tcMzhZCkBFyb">
+                            <field name="ALIGN">RIGHT</field>
+                            <statement name="FIELDS">
+                              <block type="field_static" id="eUb?%73hGx8};m8oR,vI">
+                                <field name="TEXT">#entries from each source: </field>
                                 <next>
-                                  <block type="field_number" id="Xwf3mF{Z1?gKM9+~KQh=">
+                                  <block type="field_number" id="{05_iHV@mx$5^/jBl8zs">
                                     <field name="VALUE">0</field>
-                                    <field name="FIELDNAME">latitude</field>
-                                    <field name="MIN">-90</field>
-                                    <field name="MAX">90</field>
-                                    <field name="PRECISION">0</field>
+                                    <field name="FIELDNAME">num_entries</field>
+                                    <field name="MIN">0</field>
+                                    <field name="MAX">100</field>
+                                    <field name="PRECISION">1</field>
+                                  </block>
+                                </next>
+                              </block>
+                            </statement>
+                            <next>
+                              <block type="input_dummy" id="w155p+G;Nuht,E]B3E+^">
+                                <field name="ALIGN">RIGHT</field>
+                                <statement name="FIELDS">
+                                  <block type="field_static" id="x=2P/pb;I2REddcaG!#`">
+                                    <field name="TEXT">within</field>
                                     <next>
-                                      <block type="field_static" id="vBy:A(][8W$mLtKmQ`C5">
-                                        <field name="TEXT">, longitude</field>
+                                      <block type="field_number" id="-Sf.2GJuXtqWvcdz+rP]">
+                                        <field name="VALUE">0</field>
+                                        <field name="FIELDNAME">radius</field>
+                                        <field name="MIN">0</field>
+                                        <field name="MAX">Infinity</field>
+                                        <field name="PRECISION">0</field>
                                         <next>
-                                          <block type="field_number" id="}O{TK#1mA3fx7ik+VD_z">
-                                            <field name="VALUE">0</field>
-                                            <field name="FIELDNAME">longitude</field>
-                                            <field name="MIN">-180</field>
-                                            <field name="MAX">180</field>
-                                            <field name="PRECISION">0</field>
+                                          <block type="field_static" id="L3BN)b5,JYcm%!+]K_8*">
+                                            <field name="TEXT">mi of lat</field>
+                                            <next>
+                                              <block type="field_number" id="Xwf3mF{Z1?gKM9+~KQh=">
+                                                <field name="VALUE">0</field>
+                                                <field name="FIELDNAME">lat</field>
+                                                <field name="MIN">-90</field>
+                                                <field name="MAX">90</field>
+                                                <field name="PRECISION">0</field>
+                                                <next>
+                                                  <block type="field_static" id="vBy:A(][8W$mLtKmQ`C5">
+                                                    <field name="TEXT">, lon</field>
+                                                    <next>
+                                                      <block type="field_number" id="}O{TK#1mA3fx7ik+VD_z">
+                                                        <field name="VALUE">0</field>
+                                                        <field name="FIELDNAME">lon</field>
+                                                        <field name="MIN">-180</field>
+                                                        <field name="MAX">180</field>
+                                                        <field name="PRECISION">0</field>
+                                                      </block>
+                                                    </next>
+                                                  </block>
+                                                </next>
+                                              </block>
+                                            </next>
                                           </block>
                                         </next>
                                       </block>
                                     </next>
                                   </block>
-                                </next>
+                                </statement>
                               </block>
                             </next>
                           </block>
                         </next>
                       </block>
-                    </statement>
+                    </next>
                   </block>
                 </next>
               </block>
@@ -213,7 +169,7 @@
     </statement>
     <value name="TOOLTIP">
       <block type="text" id="A/f8cjNXRJ:^E3H3@lrI" deletable="false" movable="false">
-        <field name="TEXT">fine tune parameters of analysis</field>
+        <field name="TEXT">data sources to use in sentiment analysis</field>
       </block>
     </value>
     <value name="HELPURL">
@@ -240,22 +196,22 @@
     <field name="CONNECTIONS">NONE</field>
     <statement name="INPUTS">
       <block type="input_value" id="H?NrK`GEq@;jbPzD+-qb">
-        <field name="INPUTNAME">query</field>
-        <field name="ALIGN">RIGHT</field>
+        <field name="INPUTNAME">display</field>
+        <field name="ALIGN">LEFT</field>
         <statement name="FIELDS">
           <block type="field_static" id="7X5Y+eyceHcF_pk;,qKx">
-            <field name="TEXT">query</field>
+            <field name="TEXT">display</field>
           </block>
         </statement>
         <value name="TYPE">
           <shadow type="type_null" id="%4H0n+TMY|{Y7=xMHmPf"></shadow>
           <block type="type_other" id="a2D!ddXubH__0AW77)%C">
-            <field name="TYPE">analysis_result</field>
+            <field name="TYPE">analysis_results</field>
           </block>
         </value>
         <next>
           <block type="input_dummy" id="D9+ku#2mPx8DfDmTM|2}">
-            <field name="ALIGN">RIGHT</field>
+            <field name="ALIGN">LEFT</field>
             <statement name="FIELDS">
               <block type="field_static" id="`-N3n4.H$(l]XMafg8JG">
                 <field name="TEXT">display as</field>
@@ -271,7 +227,7 @@
             </statement>
             <next>
               <block type="input_dummy" id="WY*WXf`SSPY^K~KdSdDT">
-                <field name="ALIGN">RIGHT</field>
+                <field name="ALIGN">LEFT</field>
                 <statement name="FIELDS">
                   <block type="field_static" id="/E2[3%Iq!|lCbgZbe#zi">
                     <field name="TEXT">group by</field>
