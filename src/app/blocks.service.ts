@@ -39,7 +39,7 @@ export class BlocksService {
           .appendField('data sources');
         this.appendDummyInput()
           .setAlign(Blockly.ALIGN_RIGHT)
-          .appendField('Twitter　')
+          .appendField('Twitter')
           .appendField(new Blockly.FieldImage('http://www.transparentpng.com/thumb/twitter/twitter-transparent-images--7.png', 15, 15,
             'Twitter'))
           .appendField(new Blockly.FieldCheckbox('TRUE'), 'include_twitter');
