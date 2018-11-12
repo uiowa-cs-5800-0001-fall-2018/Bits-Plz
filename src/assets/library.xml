@@ -1,0 +1,310 @@
+<xml xmlns="http://www.w3.org/1999/xhtml"><block type="factory_base" id="oBBpZM0YVi#]lHg1A)ho" deletable="false" movable="false" x="10" y="10">
+    <mutation connections="LEFT"></mutation>
+    <field name="NAME">data_sources</field>
+    <field name="INLINE">AUTO</field>
+    <field name="CONNECTIONS">LEFT</field>
+    <statement name="INPUTS">
+      <block type="input_dummy" id=";,3`q|`aGV.=9]sKe#|l">
+        <field name="ALIGN">LEFT</field>
+        <statement name="FIELDS">
+          <block type="field_static" id="(BmfvLSC9~m(Mdn=aU7{">
+            <field name="TEXT">data sources</field>
+          </block>
+        </statement>
+        <next>
+          <block type="input_dummy" id="{_$6Q~];trgtai8qDuc)">
+            <field name="ALIGN">RIGHT</field>
+            <statement name="FIELDS">
+              <block type="field_static" id="xOd?s~f5YzIA:Hvy3a|!">
+                <field name="TEXT">Twitter　</field>
+                <next>
+                  <block type="field_image" id="WHD0AmX2Ar}eMQ),wL9u">
+                    <field name="SRC">http://www.transparentpng.com/thumb/twitter/twitter-transparent-images--7.png</field>
+                    <field name="WIDTH">15</field>
+                    <field name="HEIGHT">15</field>
+                    <field name="ALT">Twitter</field>
+                    <next>
+                      <block type="field_checkbox" id="-!i=#~nWG#9hdJaJG=AN">
+                        <field name="CHECKED">TRUE</field>
+                        <field name="FIELDNAME">include_twitter</field>
+                      </block>
+                    </next>
+                  </block>
+                </next>
+              </block>
+            </statement>
+            <next>
+              <block type="input_dummy" id="fQ5[vU+u*D3B;Ur-tmid">
+                <field name="ALIGN">RIGHT</field>
+                <statement name="FIELDS">
+                  <block type="field_static" id="M7RJ8PeZkEPIz[nO0?dD">
+                    <field name="TEXT">Yelp</field>
+                    <next>
+                      <block type="field_image" id="kU-Cvc;wR9%{60@B}$@{">
+                        <field name="SRC">https://images.vexels.com/media/users/3/137424/isolated/preview/19b872cc66b8bfc0fb8d947e8728f183-yelp-icon-logo-by-vexels.png</field>
+                        <field name="WIDTH">15</field>
+                        <field name="HEIGHT">15</field>
+                        <field name="ALT">Twitter</field>
+                        <next>
+                          <block type="field_checkbox" id="lA$PAcex9GLwo~c2q$ae">
+                            <field name="CHECKED">TRUE</field>
+                            <field name="FIELDNAME">include_yelp</field>
+                          </block>
+                        </next>
+                      </block>
+                    </next>
+                  </block>
+                </statement>
+                <next>
+                  <block type="input_dummy" id="p19|Xy5]h]y(gSwvJw`d">
+                    <field name="ALIGN">RIGHT</field>
+                    <statement name="FIELDS">
+                      <block type="field_static" id="p5uNlZ3F9)x8r]YLI0=5">
+                        <field name="TEXT">Google Reviews</field>
+                        <next>
+                          <block type="field_image" id="SF2b8H]k9BXs=HRliU+Z">
+                            <field name="SRC">http://www.stickpng.com/assets/images/5847f9cbcef1014c0b5e48c8.png</field>
+                            <field name="WIDTH">15</field>
+                            <field name="HEIGHT">15</field>
+                            <field name="ALT">Twitter</field>
+                            <next>
+                              <block type="field_checkbox" id="SzFh{y]_K%pwYS#UDS;=">
+                                <field name="CHECKED">TRUE</field>
+                                <field name="FIELDNAME">include_google_review</field>
+                              </block>
+                            </next>
+                          </block>
+                        </next>
+                      </block>
+                    </statement>
+                  </block>
+                </next>
+              </block>
+            </next>
+          </block>
+        </next>
+      </block>
+    </statement>
+    <value name="TOOLTIP">
+      <block type="text" id="H^^9HrZ:#|/PhO,w-_~1" deletable="false" movable="false">
+        <field name="TEXT">check the data sources to be included in the query</field>
+      </block>
+    </value>
+    <value name="HELPURL">
+      <block type="text" id="r1ULi]*0%*?J%`p;8Xg3" deletable="false" movable="false">
+        <field name="TEXT"></field>
+      </block>
+    </value>
+    <value name="OUTPUTTYPE">
+      <shadow type="type_null" id="%@3A!/Z]@:m8Ty*||B,g"></shadow>
+      <block type="type_other" id="zM~QC3b;u}@$^E,asO?[">
+        <field name="TYPE">string array</field>
+      </block>
+    </value>
+    <value name="COLOUR">
+      <block type="colour_hue" id="9Ok5Nv4yDLMmFLA.ga{%">
+        <mutation colour="#5b67a5"></mutation>
+        <field name="HUE">230</field>
+      </block>
+    </value>
+  </block><block type="factory_base" id="gkdZD[F,l6)$[)I?o_8Q" deletable="false" movable="false" x="10" y="10">
+    <mutation connections="LEFT"></mutation>
+    <field name="NAME">query</field>
+    <field name="INLINE">EXT</field>
+    <field name="CONNECTIONS">LEFT</field>
+    <statement name="INPUTS">
+      <block type="input_value" id="5/GFof7c33XLDo)9X5Nr">
+        <field name="INPUTNAME">data_sources</field>
+        <field name="ALIGN">LEFT</field>
+        <statement name="FIELDS">
+          <block type="field_static" id="AwsXF5n;mlVN|)QmZ(:X">
+            <field name="TEXT">data_sources</field>
+          </block>
+        </statement>
+        <value name="TYPE">
+          <shadow type="type_null" id="S@xmZeUS5Uwxq9{XP%u@"></shadow>
+          <block type="type_other" id="gh*]m/#i{u{`D#1#+04H">
+            <field name="TYPE">string array</field>
+          </block>
+        </value>
+        <next>
+          <block type="input_dummy" id="Z*54v[mke~w`qHF,WAh?">
+            <field name="ALIGN">LEFT</field>
+            <statement name="FIELDS">
+              <block type="field_static" id="i1J_$fW=:H@n0j]sY[^B">
+                <field name="TEXT">key_word: </field>
+                <next>
+                  <block type="field_input" id="*~?))%nXEV{B:%(cF#i#">
+                    <field name="TEXT">default</field>
+                    <field name="FIELDNAME">key_word</field>
+                  </block>
+                </next>
+              </block>
+            </statement>
+            <next>
+              <block type="input_dummy" id="o?/fDlt~tcMzhZCkBFyb">
+                <field name="ALIGN">LEFT</field>
+                <statement name="FIELDS">
+                  <block type="field_static" id="eUb?%73hGx8};m8oR,vI">
+                    <field name="TEXT">#entries from each source: </field>
+                    <next>
+                      <block type="field_number" id="{05_iHV@mx$5^/jBl8zs">
+                        <field name="VALUE">0</field>
+                        <field name="FIELDNAME">num_entries</field>
+                        <field name="MIN">0</field>
+                        <field name="MAX">100</field>
+                        <field name="PRECISION">1</field>
+                      </block>
+                    </next>
+                  </block>
+                </statement>
+                <next>
+                  <block type="input_dummy" id="w155p+G;Nuht,E]B3E+^">
+                    <field name="ALIGN">LEFT</field>
+                    <statement name="FIELDS">
+                      <block type="field_static" id="x=2P/pb;I2REddcaG!#`">
+                        <field name="TEXT">within</field>
+                        <next>
+                          <block type="field_number" id="-Sf.2GJuXtqWvcdz+rP]">
+                            <field name="VALUE">0</field>
+                            <field name="FIELDNAME">radius</field>
+                            <field name="MIN">0</field>
+                            <field name="MAX">Infinity</field>
+                            <field name="PRECISION">0</field>
+                            <next>
+                              <block type="field_static" id="L3BN)b5,JYcm%!+]K_8*">
+                                <field name="TEXT">miles of latitude</field>
+                                <next>
+                                  <block type="field_number" id="Xwf3mF{Z1?gKM9+~KQh=">
+                                    <field name="VALUE">0</field>
+                                    <field name="FIELDNAME">latitude</field>
+                                    <field name="MIN">-90</field>
+                                    <field name="MAX">90</field>
+                                    <field name="PRECISION">0</field>
+                                    <next>
+                                      <block type="field_static" id="vBy:A(][8W$mLtKmQ`C5">
+                                        <field name="TEXT">, longitude</field>
+                                        <next>
+                                          <block type="field_number" id="}O{TK#1mA3fx7ik+VD_z">
+                                            <field name="VALUE">0</field>
+                                            <field name="FIELDNAME">longitude</field>
+                                            <field name="MIN">-180</field>
+                                            <field name="MAX">180</field>
+                                            <field name="PRECISION">0</field>
+                                          </block>
+                                        </next>
+                                      </block>
+                                    </next>
+                                  </block>
+                                </next>
+                              </block>
+                            </next>
+                          </block>
+                        </next>
+                      </block>
+                    </statement>
+                  </block>
+                </next>
+              </block>
+            </next>
+          </block>
+        </next>
+      </block>
+    </statement>
+    <value name="TOOLTIP">
+      <block type="text" id="A/f8cjNXRJ:^E3H3@lrI" deletable="false" movable="false">
+        <field name="TEXT">fine tune parameters of analysis</field>
+      </block>
+    </value>
+    <value name="HELPURL">
+      <block type="text" id="Sv7w8+o`2DGaBq,gInJA" deletable="false" movable="false">
+        <field name="TEXT"></field>
+      </block>
+    </value>
+    <value name="OUTPUTTYPE">
+      <shadow type="type_null" id="wq#b1e]u~j32d3||Lv6R"></shadow>
+      <block type="type_other" id="!Rlom:kaGkxe~+I0)H-^">
+        <field name="TYPE">analysis_results</field>
+      </block>
+    </value>
+    <value name="COLOUR">
+      <block type="colour_hue" id="B`qy0[W=-=+)*jG#U?2S">
+        <mutation colour="#5b67a5"></mutation>
+        <field name="HUE">230</field>
+      </block>
+    </value>
+  </block><block type="factory_base" id="Q*)_K`uBS~C[H}`#JHk3" deletable="false" movable="false" x="10" y="10">
+    <mutation connections="NONE"></mutation>
+    <field name="NAME">display</field>
+    <field name="INLINE">EXT</field>
+    <field name="CONNECTIONS">NONE</field>
+    <statement name="INPUTS">
+      <block type="input_value" id="H?NrK`GEq@;jbPzD+-qb">
+        <field name="INPUTNAME">query</field>
+        <field name="ALIGN">RIGHT</field>
+        <statement name="FIELDS">
+          <block type="field_static" id="7X5Y+eyceHcF_pk;,qKx">
+            <field name="TEXT">query</field>
+          </block>
+        </statement>
+        <value name="TYPE">
+          <shadow type="type_null" id="%4H0n+TMY|{Y7=xMHmPf"></shadow>
+          <block type="type_other" id="a2D!ddXubH__0AW77)%C">
+            <field name="TYPE">analysis_result</field>
+          </block>
+        </value>
+        <next>
+          <block type="input_dummy" id="D9+ku#2mPx8DfDmTM|2}">
+            <field name="ALIGN">RIGHT</field>
+            <statement name="FIELDS">
+              <block type="field_static" id="`-N3n4.H$(l]XMafg8JG">
+                <field name="TEXT">display as</field>
+                <next>
+                  <block type="field_dropdown" id="~Vq%f~X0X%JezNf!6CH3">
+                    <mutation options="[&quot;text&quot;]"></mutation>
+                    <field name="FIELDNAME">graph_type</field>
+                    <field name="USER0">bar chart</field>
+                    <field name="CPU0">bar_chart</field>
+                  </block>
+                </next>
+              </block>
+            </statement>
+            <next>
+              <block type="input_dummy" id="WY*WXf`SSPY^K~KdSdDT">
+                <field name="ALIGN">RIGHT</field>
+                <statement name="FIELDS">
+                  <block type="field_static" id="/E2[3%Iq!|lCbgZbe#zi">
+                    <field name="TEXT">group by</field>
+                    <next>
+                      <block type="field_dropdown" id="DfH=ftvgoWj~u56/NwD_">
+                        <mutation options="[&quot;text&quot;]"></mutation>
+                        <field name="FIELDNAME">group_by_type</field>
+                        <field name="USER0">positive/negative</field>
+                        <field name="CPU0">positive_and_negative</field>
+                      </block>
+                    </next>
+                  </block>
+                </statement>
+              </block>
+            </next>
+          </block>
+        </next>
+      </block>
+    </statement>
+    <value name="TOOLTIP">
+      <block type="text" id="$bgCfuAl|^oaw^K4~RC8" deletable="false" movable="false">
+        <field name="TEXT"></field>
+      </block>
+    </value>
+    <value name="HELPURL">
+      <block type="text" id="uwLJBQs(/#e$MU,L7NdR" deletable="false" movable="false">
+        <field name="TEXT"></field>
+      </block>
+    </value>
+    <value name="COLOUR">
+      <block type="colour_hue" id="nkT-!X+p[e(+^`R_$RV,">
+        <mutation colour="#5b67a5"></mutation>
+        <field name="HUE">230</field>
+      </block>
+    </value>
+  </block></xml>
