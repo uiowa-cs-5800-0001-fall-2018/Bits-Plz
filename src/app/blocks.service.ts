@@ -79,6 +79,37 @@ export class BlocksService {
     };
   }
 
+  private static gen_query_string(
+    include_twitter: boolean = false,
+    include_yelp: boolean = false,
+    include_google_review: boolean = false,
+    key_word: string = 'UIowa',
+    num: number = 15,
+    lat: number = 41.6611,
+    lon: number = 91.5302,
+    radius: number = 50
+  ): string {
+
+    return '0';
+  }
+
+  private static gen_generators(): void {
+    Blockly.JavaScript['data_sources'] = function(block) {
+      var checkbox_include_twitter = block.getFieldValue('include_twitter') == 'TRUE';
+      var checkbox_include_yelp = block.getFieldValue('include_yelp') == 'TRUE';
+      var checkbox_include_google_review = block.getFieldValue('include_google_review') == 'TRUE';
+      var text_key_word = block.getFieldValue('key_word');
+      var number_num_entries = block.getFieldValue('num_entries');
+      var number_radius = block.getFieldValue('radius');
+      var number_lat = block.getFieldValue('lat');
+      var number_lon = block.getFieldValue('lon');
+      // TODO: Assemble JavaScript into code variable.
+      var code = '...';
+      // TODO: Change ORDER_NONE to the correct strength.
+      return [code, Blockly.JavaScript.ORDER_NONE];
+    };
+  }
+
   public static inject_blocks(div_name: string) {
     BlocksService.gen_blocks();
     // noinspection TypeScriptValidateJSTypes

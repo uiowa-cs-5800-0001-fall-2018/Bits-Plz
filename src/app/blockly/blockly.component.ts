@@ -82,6 +82,7 @@ export class BlocklyComponent implements OnInit {
     console.log('successfully captured child component: ', resultDisplay);
   }
   run_query(): void {
+    // TODO get_tweets takes a URL query string generated from workspace blocks and respond accordingly
     this.twitterService.get_tweets().subscribe({
       next: x => {
         const distribution = BlocklyComponent.calc_distribution(x);
