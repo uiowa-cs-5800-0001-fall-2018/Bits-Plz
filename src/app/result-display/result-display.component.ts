@@ -1,9 +1,4 @@
 import { Component, OnInit } from '@angular/core';
-import { ResultModel } from '../services/result.model';
-
-// declare var require: any;
-// const echarts = require('echarts');
-
 import * as echarts from 'echarts';
 
 @Component({
@@ -13,45 +8,32 @@ import * as echarts from 'echarts';
 })
 export class ResultDisplayComponent implements OnInit {
 
-  results: ResultModel[];
+  chart;
 
-  constructor() {
-    this.results = [
-      {
-        content: 'cats can fly',
-        score: 10
-      },
-      {
-        content: 'cats can eat',
-        score: 5
-      },
-      {
-        content: 'cats do not explode',
-        score: 30
-      },
-      {
-        content: 'cats have fur',
-        score: 0
-      }
-    ];
-  }
+  constructor() { }
 
   ngOnInit() {
-    const myChart = echarts.init(document.getElementById('main'));
-    myChart.setOption({
+    this.chart = echarts.init(document.getElementById('main'));
+    this.chart.setOption({
       title: {
         text: 'Sentiment Analysis Results'
       },
       tooltip: {},
       xAxis: {
-        data: ['positive', 'negative']
+        data: ['positive', 'negative', 'neutral']
       },
       yAxis: {},
       series: [{
         name: 'number of tweets',
         type: 'bar',
-        data: [10, 20]
+        data: [10, 20, 30]
       }]
+    });
+  }
+
+  update_contents(positive: number, negative: number, neutral: number): void {
+    this.chart.setOption({
+      series: [{ data: [positive, negative, neutral] }]
     });
   }
 }

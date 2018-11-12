@@ -1,6 +1,9 @@
-import {Component, OnInit} from '@angular/core';
+import {Component, OnInit, ViewChild} from '@angular/core';
 import {FlashMessagesService} from 'ngx-flash-messages';
 import {FirebaseService} from '../services/firebase.service';
+import {TwitterService} from '../services/twitter.service';
+import {ResultModel} from '../services/result.model';
+import {ResultDisplayComponent} from '../result-display/result-display.component';
 
 declare var Blockly: any;
 
@@ -12,9 +15,12 @@ declare var Blockly: any;
 
 export class BlocklyComponent implements OnInit {
 
+  resultDisplay;
+
   constructor(
     private flashMessagesService: FlashMessagesService,
-    private firebaseService: FirebaseService
+    private firebaseService: FirebaseService,
+    private twitterService: TwitterService
   ) {
   }
 
@@ -378,6 +384,26 @@ export class BlocklyComponent implements OnInit {
     <category name="Functions" colour="#9A5CA6" custom="PROCEDURE"></category>
 </xml>`;
 
+  private static calc_distribution(arr: ResultModel[]) {
+    let positive = 0;
+    let negative = 0;
+    let neutral = 0;
+    for (const res of arr) {
+      if (res.score > 0) {
+        positive++;
+      } else if (res.score < 0) {
+        negative++;
+      } else {
+        neutral++;
+      }
+    }
+    console.log('updated, positive: ', positive, ', negative: ', negative, 'neutral: ', neutral);
+    return {
+      positive: positive,
+      negative: negative,
+      neutral: neutral
+    };
+  }
 
   ngOnInit() {
     this.createBlocks();
@@ -416,5 +442,30 @@ export class BlocklyComponent implements OnInit {
     } else {
       this.flashMessagesService.show(msg_fail, {timeout: 10000});
     }
+  }
+
+
+
+  @ViewChild(ResultDisplayComponent)
+  set resultDisplayComponent (resultDisplay: ResultDisplayComponent) {
+    this.resultDisplay = resultDisplay;
+    console.log('successfully captured child component: ', resultDisplay);
+  }
+  run_query(): void {
+    this.twitterService.get_tweets().subscribe({
+      next: x => {
+        console.log(typeof x);
+        console.log(x);
+        console.log(x.length);
+        const distribution = BlocklyComponent.calc_distribution(x);
+        this.resultDisplay.update_contents(
+          distribution.positive,
+          distribution.negative,
+          distribution.neutral
+        );
+      },
+      error: err => console.log('cannot update, ', err),
+      complete: () => console.log('query completed')
+    });
   }
 }

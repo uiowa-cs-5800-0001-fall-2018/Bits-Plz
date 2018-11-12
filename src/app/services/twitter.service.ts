@@ -27,7 +27,7 @@ export class TwitterService {
     const post_str = 'https://bits-plz-backend.herokuapp.com/search';
     return new Observable(ob => {
       request.post(post_str, (error, response, body) => { // 'body': string is the actual content
-        ob.next(TwitterService.parse_response(parseJson(body)));
+        ob.next(parseJson(body));
         if (error != null) { ob.error(error); }
       }).then(() => { ob.complete(); });
     });
