@@ -47,13 +47,39 @@ export class BlocklyComponent implements OnInit {
     BlocksService.inject_blocks('blocklyDiv');
   }
 
+  gotData(data) {
+    const save = prompt('Please enter the name of the saved workspace:', '');
+    const savespace = data.val();
+    const keys = Object.keys(savespace);
+    console.log(keys);
+    for (let i = 0; i < keys.length; i++) {
+      const k = keys[i];
+      const name = savespace[k].name;
+      const workspace = savespace[k].workspace;
+      console.log(name);
+      console.log(workspace);
+      if (name === save) {
+        BlocksService.xml_string_to_workspace(workspace);
+      }
+     
+    }
+  }
+
+  errData(err) {
+    console.log('Error!');
+    console.log(err);
+  }
+
   save_worksapce(): void {
+    const workspace = prompt('Please enter the name of the saved workspace:', '');
     const msg_success = 'successfully saved current workspace!';
     const msg_fail = 'you need to login first';
     const user_name = sessionStorage.getItem('user_name');
-    if (user_name) {
-      this.firebaseService.database().ref(user_name).set({
-        saved_workspace: BlocksService.workspace_to_xml_string()
+    const usersRef = this.firebaseService.database().ref(user_name);
+    if (user_name && workspace != null) {
+      const userRef = usersRef.push({
+        name: workspace,
+        workspace: BlocksService.workspace_to_xml_string()
       }).then(() => this.flashMessagesService.show(msg_success, {timeout: 10000}));
     } else {
       this.flashMessagesService.show(msg_fail, {timeout: 10000});
@@ -64,17 +90,14 @@ export class BlocklyComponent implements OnInit {
     const msg_success = 'successfully restored last saved workspace!';
     const msg_fail = 'you need to login first';
     const user_name = sessionStorage.getItem('user_name');
-    if (user_name) {
+    const usersRef = this.firebaseService.database().ref(user_name);
 
-      this.firebaseService.database().ref(user_name + '/saved_workspace')
-        .on('value', xml_text_snapshot => {
-          BlocksService.xml_string_to_workspace(xml_text_snapshot.val());
-          this.flashMessagesService.show(msg_success, {timeout: 10000});
-        });
-    } else {
-      this.flashMessagesService.show(msg_fail, {timeout: 10000});
+    if (user_name) {
+      usersRef.on('value', this.gotData, this.errData);
     }
   }
+
+
 
   @ViewChild(ResultDisplayComponent)
   set resultDisplayComponent (resultDisplay: ResultDisplayComponent) {
