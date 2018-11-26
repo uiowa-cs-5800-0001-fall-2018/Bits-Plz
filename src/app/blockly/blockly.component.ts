@@ -12,6 +12,7 @@ const swal: SweetAlert = _swal as any;
 */
 import swal from 'sweetalert2';
 
+declare var Blockly: any;
 
 import {createElement} from '@angular/core/src/view/element';
 
@@ -217,6 +218,17 @@ export class BlocklyComponent implements OnInit {
       error: err => console.log('cannot update, ', err),
       complete: () => console.log('query completed')
     });
+  }
+
+  show_code(): void {
+    // Generate JavaScript code and display it.
+    const demoWorkspace = Blockly.inject('blocklyDiv',
+      {media: '../../media/',
+        toolbox: document.getElementById('toolbox')});
+    Blockly.Xml.domToWorkspace(document.getElementById('startBlocks'),
+      demoWorkspace);
+    const code = Blockly.JavaScript.workspaceToCode(demoWorkspace);
+    alert('test' + code);
   }
 
 
