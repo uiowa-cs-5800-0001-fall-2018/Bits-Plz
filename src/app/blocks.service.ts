@@ -33,6 +33,24 @@ export class BlocksService {
         this.setHelpUrl('');
       }
     };
+
+    /*
+    Blockly.JavaScript['display'] = function(block)
+    {
+      let checkbox_include_twitter = block.getFieldValue('include_twitter') == 'TRUE';
+      let checkbox_include_yelp = block.getFieldValue('include_yelp') == 'TRUE';
+      let checkbox_include_google_review = block.getFieldValue('include_google_review') == 'TRUE';
+      let text_key_word = block.getFieldValue('key_word');
+      let number_num_entries = block.getFieldValue('num_entries');
+      let number_radius = block.getFieldValue('radius');
+      let number_lat = block.getFieldValue('lat');
+      let number_lon = block.getFieldValue('lon');
+      // TODO: Assemble JavaScript into code variable.
+      let code = 'TESSTING DISPLAY BLOCK';
+      // TODO: Change ORDER_NONE to the correct strength.
+      return [code, Blockly.JavaScript.ORDER_NONE];
+    }; */
+
     Blockly.Blocks['data_sources'] = {
       init: function() {
         this.appendDummyInput()
@@ -93,6 +111,7 @@ export class BlocksService {
     return '0';
   }
 
+
   private static gen_generators(): void {
     Blockly.JavaScript['data_sources'] = function(block) {
       var checkbox_include_twitter = block.getFieldValue('include_twitter') == 'TRUE';
@@ -110,18 +129,34 @@ export class BlocksService {
     };
   }
 
+  public static show_code(): void {
+    // Generate JavaScript code and display it.
+    var code = this.workspace_to_xml_string();
+    alert('test\n' + code);
+  }
+
   public static inject_blocks(div_name: string) {
     BlocksService.gen_blocks();
     // noinspection TypeScriptValidateJSTypes
     Blockly.inject(div_name, {toolbox: BlocksService.gen_tool_box()});
   }
 
+
   public static workspace_to_xml_string(): string {
     return Blockly.Xml.domToText(Blockly.Xml.workspaceToDom(Blockly.mainWorkspace));
   }
+
+  // I don't know if this works, but I need the blocks to be able to display the data as string.
+  // So that I can  read the variable data.
+  /*
+  public static workspace_to_normal_string(): string {
+    return Blockly.JavaScript.workspaceToCode(Blockly.mainWorkspace);
+  }*/
 
   public static xml_string_to_workspace(xml_string: string): void {
     Blockly.mainWorkspace.clear();
     Blockly.Xml.domToWorkspace(Blockly.mainWorkspace, Blockly.Xml.textToDom(xml_string));
   }
+
+
 }
