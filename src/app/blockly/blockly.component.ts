@@ -222,7 +222,11 @@ export class BlocklyComponent implements OnInit {
   show_code(): void {
     // Generate JavaScript code and display it.
     BlocksService.show_code();
-    //alert('test');
+  }
+
+  execute_code(): void {
+    // Generate JavaScript code and display it.
+    BlocksService.execute_code();
   }
 
 

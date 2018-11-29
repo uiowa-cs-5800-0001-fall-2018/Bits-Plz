@@ -6,6 +6,14 @@ export class BlocksService {
 
   constructor() { }
 
+  /*public static canvasDefinition = `<xml id="toolbox" style="display: none">
+  <category name="Sentiment Analysis" colour="#5C81A6"> 
+    <block type="data_sources"></block>
+    <block type="display"></block>
+  </category>
+  </xml>`;*/
+
+
   private static gen_tool_box(): string {
     return `<xml xmlns="http://www.w3.org/1999/xhtml" id="toolbox" style="display: none;">
       <category name="Sentiment Analysis" colour="#5C81A6">
@@ -14,6 +22,22 @@ export class BlocksService {
       </category>
     </xml>`;
   }
+
+  /*
+  Blockly.Blocks['test'] = {
+    init: function() {
+      this.appendDummyInput()
+        .setAlign(Blockly.ALIGN_CENTRE)
+        .appendField("TEST BLOCK");
+      this.appendDummyInput()
+        .appendField("Variable:")
+        .appendField(new Blockly.FieldTextInput("default"), "m_variable");
+      this.setColour(230);
+      this.setTooltip("");
+      this.setHelpUrl("");
+    }
+  };*/
+
 
   private static gen_blocks(): void {
     Blockly.Blocks['display'] = {
@@ -45,9 +69,9 @@ export class BlocksService {
       let number_radius = block.getFieldValue('radius');
       let number_lat = block.getFieldValue('lat');
       let number_lon = block.getFieldValue('lon');
-      // TODO: Assemble JavaScript into code variable.
+      //  Assemble JavaScript into code variable.
       let code = 'TESSTING DISPLAY BLOCK';
-      // TODO: Change ORDER_NONE to the correct strength.
+      // Change ORDER_NONE to the correct strength.
       return [code, Blockly.JavaScript.ORDER_NONE];
     }; */
 
@@ -95,6 +119,23 @@ export class BlocksService {
         this.setHelpUrl('');
       }
     };
+
+    Blockly.JavaScript['data_sources'] = function(block) {
+
+      var checkbox_include_twitter = block.getFieldValue('include_twitter') == 'TRUE';
+      var checkbox_include_yelp = block.getFieldValue('include_yelp') == 'TRUE';
+      var checkbox_include_google_review = block.getFieldValue('include_google_review') == 'TRUE';
+      var text_key_word = block.getFieldValue('key_word');
+      var number_num_entries = block.getFieldValue('num_entries');
+      var number_radius = block.getFieldValue('radius');
+      var number_lat = block.getFieldValue('lat');
+      var number_lon = block.getFieldValue('lon');
+      // TODO: Assemble JavaScript into code variable.
+      var code = 'Testing key_work is: ' + text_key_word;
+      // TODO: Change ORDER_NONE to the correct strength.
+      //return [code, Blockly.JavaScript.ORDER_NONE];
+      return code;
+    };
   }
 
   private static gen_query_string(
@@ -113,30 +154,12 @@ export class BlocksService {
 
 
   private static gen_generators(): void {
-    Blockly.JavaScript['data_sources'] = function(block) {
-      var checkbox_include_twitter = block.getFieldValue('include_twitter') == 'TRUE';
-      var checkbox_include_yelp = block.getFieldValue('include_yelp') == 'TRUE';
-      var checkbox_include_google_review = block.getFieldValue('include_google_review') == 'TRUE';
-      var text_key_word = block.getFieldValue('key_word');
-      var number_num_entries = block.getFieldValue('num_entries');
-      var number_radius = block.getFieldValue('radius');
-      var number_lat = block.getFieldValue('lat');
-      var number_lon = block.getFieldValue('lon');
-      // TODO: Assemble JavaScript into code variable.
-      var code = '...';
-      // TODO: Change ORDER_NONE to the correct strength.
-      return [code, Blockly.JavaScript.ORDER_NONE];
-    };
-  }
 
-  public static show_code(): void {
-    // Generate JavaScript code and display it.
-    var code = this.workspace_to_xml_string();
-    alert('test\n' + code);
   }
 
   public static inject_blocks(div_name: string) {
     BlocksService.gen_blocks();
+    BlocksService.gen_generators();
     // noinspection TypeScriptValidateJSTypes
     Blockly.inject(div_name, {toolbox: BlocksService.gen_tool_box()});
   }
@@ -158,5 +181,16 @@ export class BlocksService {
     Blockly.Xml.domToWorkspace(Blockly.mainWorkspace, Blockly.Xml.textToDom(xml_string));
   }
 
+  public static show_code(): void {
+    // Generate JavaScript code and display it.
+    alert('test\n' + Blockly.JavaScript.workspaceToCode(Blockly.mainWorkspace));
+  }
+
+  public static execute_code(): void {
+    // Generate JavaScript code and display it.
+    // var code = Blockly.Javascript.workspaceToCode(Blockly.mainWorkspace);
+    // return Blockly.Xml.domToText(Blockly.Xml.workspaceToDom(Blockly.mainWorkspace));
+    // alert('THIS NEEDS TO EXECUTE THE CODE' + Blockly.Xml.workspaceToCode(Blockly.mainWorkspace));
+  }
 
 }
