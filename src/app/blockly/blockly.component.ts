@@ -59,7 +59,7 @@ export class BlocklyComponent implements OnInit {
     usersRef.on('value', this.loadUserData, this.errData);
   }
 
-  buttonEvent() {
+  buttonEvent(name) {
     const user_name = sessionStorage.getItem('user_name');
     const usersRef = this.firebaseService.database().ref(user_name);
 
@@ -98,7 +98,6 @@ export class BlocklyComponent implements OnInit {
       }
     });
   }
-
 
   loadUserData(data) {
     const savespace = data.val();
@@ -176,14 +175,14 @@ export class BlocklyComponent implements OnInit {
     const msg_success = 'Successfully saved';
     const msg_fail = 'you need to login first';
     const user_name = sessionStorage.getItem('user_name');
-    const usersRef = this.firebaseService.database().ref(user_name + '/' + workspace);
+    const usersRef = this.firebaseService.database().ref(user_name);
     if (user_name && workspace != null) {
-      const userRef = usersRef.set({
+      const userRef = usersRef.push({
         name: workspace,
         workspace: BlocksService.workspace_to_xml_string()
       }).then(() => this.flashMessagesService.show(msg_success, {timeout: 10000}));
       swal({
-        position: 'center',
+        position: 'top-end',
         type: 'success',
         title: 'Your work has been saved',
         showConfirmButton: false,
@@ -251,6 +250,7 @@ export class BlocklyComponent implements OnInit {
   show_code(): void {
     // Generate JavaScript code and display it.
     BlocksService.show_code();
+    //alert('test');
   }
 
 
