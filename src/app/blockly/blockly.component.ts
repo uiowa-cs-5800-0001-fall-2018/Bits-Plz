@@ -119,7 +119,7 @@ export class BlocklyComponent implements OnInit {
 
       const myEle = document.getElementById(name);
       console.log(btn);
-      btn.addEventListener('click', () => {
+      /*btn.addEventListener('click', () => {
         console.log(this);
         console.log(user_name);
         const usersRef = this.firebaseService.database().ref(user_name);
@@ -157,15 +157,23 @@ export class BlocklyComponent implements OnInit {
               'success'
             );
           }
-        }); }, false);
+        }); }, false);*/
       if (!myEle) {
         document.body.appendChild(btn);
       }
     }
   }
 
-  gotData(data) {
-    const save = prompt('Please enter the name of the saved workspace:', '');
+  async gotData(data) {
+    const {value: save} = await swal({
+      title: 'Which workspace would you like to load?',
+      input: 'text',
+      showCancelButton: true,
+      inputValidator: (value) => {
+        return !value && 'You need to write something!';
+      }
+    });
+
     const savespace = data.val();
     const keys = Object.keys(savespace);
     console.log(keys);
@@ -178,6 +186,13 @@ export class BlocklyComponent implements OnInit {
      if (name === save) {
         BlocksService.xml_string_to_workspace(workspace);
       }
+      swal({
+        position: 'center',
+        type: 'success',
+        title: 'Your work has been loaded',
+        showConfirmButton: false,
+        timer: 1500
+      });
     }
   }
 
@@ -248,6 +263,13 @@ export class BlocklyComponent implements OnInit {
       }
     });
     usersRef.child(workspace).remove();
+    swal({
+      position: 'center',
+      type: 'success',
+      title: 'Your work has been deleted',
+      showConfirmButton: false,
+      timer: 1500
+    });
   }
 
   @ViewChild(ResultDisplayComponent)
