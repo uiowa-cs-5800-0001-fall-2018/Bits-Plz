@@ -125,8 +125,15 @@ export class BlocklyComponent implements OnInit {
     }
   }
 
-  gotData(data) {
-    const save = prompt('Please enter the name of the saved workspace:', '');
+  async gotData(data) {
+    const {value: save} = await swal({
+      title: 'Which workspace would you like to load?',
+      input: 'text',
+      showCancelButton: true,
+      inputValidator: (value) => {
+        return !value && 'You need to write something!';
+      }
+    });
     const savespace = data.val();
     const keys = Object.keys(savespace);
     console.log(keys);
@@ -197,6 +204,27 @@ export class BlocklyComponent implements OnInit {
     }
   }
 
+  async delete_workspace() {
+    const user_name = sessionStorage.getItem('user_name');
+    const usersRef = this.firebaseService.database().ref(user_name);
+    const {value: workspace} = await swal({
+      title: 'Which workspace would you like to delete?',
+      input: 'text',
+      showCancelButton: true,
+      inputValidator: (value) => {
+        return !value && 'You need to write something!';
+      }
+    });
+    usersRef.child(workspace).remove();
+    swal({
+      position: 'center',
+      type: 'success',
+      title: 'Your work has been deleted',
+      showConfirmButton: false,
+      timer: 1500
+    });
+  }
+
   @ViewChild(ResultDisplayComponent)
   set resultDisplayComponent (resultDisplay: ResultDisplayComponent) {
     this.resultDisplay = resultDisplay;
@@ -222,6 +250,7 @@ export class BlocklyComponent implements OnInit {
   show_code(): void {
     // Generate JavaScript code and display it.
     BlocksService.show_code();
+    //alert('test');
   }
 
 
