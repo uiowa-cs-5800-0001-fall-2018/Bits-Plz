@@ -59,7 +59,7 @@ export class BlocklyComponent implements OnInit {
     usersRef.on('value', this.loadUserData, this.errData);
   }
 
-  buttonEvent(name) {
+  buttonEvent() {
     const user_name = sessionStorage.getItem('user_name');
     const usersRef = this.firebaseService.database().ref(user_name);
 
@@ -99,6 +99,7 @@ export class BlocklyComponent implements OnInit {
     });
   }
 
+
   loadUserData(data) {
     const savespace = data.val();
     const keys = Object.keys(savespace);
@@ -125,8 +126,15 @@ export class BlocklyComponent implements OnInit {
     }
   }
 
-  gotData(data) {
-    const save = prompt('Please enter the name of the saved workspace:', '');
+  async gotData(data) {
+    const {value: save} = await swal({
+      title: 'Which workspace would you like to load?',
+      input: 'text',
+      showCancelButton: true,
+      inputValidator: (value) => {
+        return !value && 'You need to write something!';
+      }
+    });
     const savespace = data.val();
     const keys = Object.keys(savespace);
     console.log(keys);
@@ -168,14 +176,14 @@ export class BlocklyComponent implements OnInit {
     const msg_success = 'Successfully saved';
     const msg_fail = 'you need to login first';
     const user_name = sessionStorage.getItem('user_name');
-    const usersRef = this.firebaseService.database().ref(user_name);
+    const usersRef = this.firebaseService.database().ref(user_name + '/' + workspace);
     if (user_name && workspace != null) {
-      const userRef = usersRef.push({
+      const userRef = usersRef.set({
         name: workspace,
         workspace: BlocksService.workspace_to_xml_string()
       }).then(() => this.flashMessagesService.show(msg_success, {timeout: 10000}));
       swal({
-        position: 'top-end',
+        position: 'center',
         type: 'success',
         title: 'Your work has been saved',
         showConfirmButton: false,
@@ -195,6 +203,27 @@ export class BlocklyComponent implements OnInit {
     if (user_name) {
       usersRef.on('value', this.gotData, this.errData);
     }
+  }
+
+  async delete_workspace() {
+    const user_name = sessionStorage.getItem('user_name');
+    const usersRef = this.firebaseService.database().ref(user_name);
+    const {value: workspace} = await swal({
+      title: 'Which workspace would you like to delete?',
+      input: 'text',
+      showCancelButton: true,
+      inputValidator: (value) => {
+        return !value && 'You need to write something!';
+      }
+    });
+    usersRef.child(workspace).remove();
+    swal({
+      position: 'center',
+      type: 'success',
+      title: 'Your work has been deleted',
+      showConfirmButton: false,
+      timer: 1500
+    });
   }
 
   @ViewChild(ResultDisplayComponent)
@@ -222,7 +251,6 @@ export class BlocklyComponent implements OnInit {
   show_code(): void {
     // Generate JavaScript code and display it.
     BlocksService.show_code();
-    //alert('test');
   }
 
 
