@@ -224,10 +224,5 @@ export class BlocklyComponent implements OnInit {
     BlocksService.show_code();
   }
 
-  execute_code(): void {
-    // Generate JavaScript code and display it.
-    BlocksService.execute_code();
-  }
-
 
 }
