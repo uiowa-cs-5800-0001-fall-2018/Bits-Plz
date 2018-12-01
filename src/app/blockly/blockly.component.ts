@@ -52,11 +52,78 @@ export class BlocklyComponent implements OnInit {
     };
   }
 
+
   ngOnInit() {
     const user_name = sessionStorage.getItem('user_name');
     const usersRef = this.firebaseService.database().ref(user_name);
     BlocksService.inject_blocks('blocklyDiv');
-    usersRef.on('value', this.loadUserData, this.errData);
+    usersRef.once('value')
+      .then(snapshot => {
+        snapshot.forEach(childSnapshot => {
+          const name = childSnapshot.ref.key;
+          console.log(name);
+          const btn = document.createElement('BUTTON');
+          const t = document.createTextNode(name);
+          btn.setAttribute('id', name);
+          btn.appendChild(t);
+          const myEle = document.getElementById(name);
+          btn.addEventListener('click', () => {
+            console.log(this);
+            console.log(user_name);
+            console.log(btn.id);
+            // Delete Workspace
+            swal({
+              position: 'center',
+              type: 'success',
+              title: 'Your work has been deleted',
+              showConfirmButton: false,
+              timer: 1500
+            });
+
+            console.log('NEXT');
+            const swalWithBootstrapButtons = swal.mixin({
+              confirmButtonClass: 'btn btn-success',
+              cancelButtonClass: 'btn btn-danger',
+              buttonsStyling: false,
+            });
+
+            swalWithBootstrapButtons({
+              title: 'What would you like to do with this workspace?',
+              showCancelButton: true,
+              confirmButtonText: 'Load',
+              showCloseButton: true,
+              cancelButtonText: 'Delete',
+              reverseButtons: false
+            }).then((result) => {
+              if (result.value) {
+                this.firebaseService.database().ref(user_name + '/' + btn.id + '/workspace')
+                  .on('value', xml_text_snapshot => {
+                    BlocksService.xml_string_to_workspace(xml_text_snapshot.val());
+                  });
+                swalWithBootstrapButtons(
+                  'Load Complete',
+                  'Your workspace was successfully loaded.',
+                  'success'
+                );
+              } else if (
+                // Read more about handling dismissals
+                result.dismiss === swal.DismissReason.cancel
+              ) {
+                usersRef.child(btn.id).remove();
+                swalWithBootstrapButtons(
+                  'Deleted',
+                  'Your workspace was successfully deleted',
+                  'success'
+                );
+              }
+            }); }, false);
+
+          if (!myEle && '/blockly' === window.location.pathname) {
+            document.body.appendChild(btn);
+          }
+        });
+      });
+    // usersRef.on('value', this.loadUserData, this.errData);
   }
 
   buttonEvent() {
@@ -126,6 +193,8 @@ export class BlocklyComponent implements OnInit {
         console.log(user_name);
         const firebaseService = new FirebaseService();
         const usersRef = firebaseService.database().ref(user_name);
+        console.log(btn.id);
+        this.eliminate_workspace(btn.id);
         console.log('NEXT');
         const swalWithBootstrapButtons = swal.mixin({
           confirmButtonClass: 'btn btn-success',
@@ -272,6 +341,21 @@ export class BlocklyComponent implements OnInit {
       timer: 1500
     });
   }
+
+  async eliminate_workspace(id) {
+    const user_name = sessionStorage.getItem('user_name');
+    const usersRef = this.firebaseService.database().ref(user_name);
+    usersRef.child(id).remove();
+    swal({
+      position: 'center',
+      type: 'success',
+      title: 'Your work has been deleted',
+      showConfirmButton: false,
+      timer: 1500
+    });
+  }
+
+
 
   @ViewChild(ResultDisplayComponent)
   set resultDisplayComponent (resultDisplay: ResultDisplayComponent) {
