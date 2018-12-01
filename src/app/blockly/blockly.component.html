@@ -7,6 +7,11 @@
 <button (click)="run_query()">Run Query!</button>
 <button (click)="show_code()">Show Code!</button>
 <button (click)="loadUserData()">Load User Data</button>
+<ul>
+  <li *ngFor="let b of btn">
+    {{b}}
+  </li>
+</ul>
 <app-result-display></app-result-display>
 
 

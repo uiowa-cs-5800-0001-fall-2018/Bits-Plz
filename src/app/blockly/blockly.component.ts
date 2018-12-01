@@ -23,6 +23,7 @@ import {createElement} from '@angular/core/src/view/element';
 export class BlocklyComponent implements OnInit {
 
   resultDisplay;
+  btn;
 
   constructor(
     private flashMessagesService: FlashMessagesService,
@@ -57,6 +58,7 @@ export class BlocklyComponent implements OnInit {
     const usersRef = this.firebaseService.database().ref(user_name);
     BlocksService.inject_blocks('blocklyDiv');
     usersRef.on('value', this.loadUserData, this.errData);
+    this.btn = document.createElement('BUTTON');
   }
 
   buttonEvent() {
@@ -111,21 +113,22 @@ export class BlocklyComponent implements OnInit {
       console.log(workspace);
       console.log(name);
 
-      const btn = document.createElement('BUTTON');
+
       const t = document.createTextNode(name);
-      btn.setAttribute('id', name);
+      this.btn.setAttribute('id', name);
       console.log(name);
-      btn.appendChild(t);
+      this.btn.appendChild(t);
 
       const myEle = document.getElementById(name);
-      console.log(btn);
+      console.log(this.btn);
       /*this is the beginning of the comment area */
-      btn.addEventListener('click', () => {
+      this.btn.addEventListener('click', () => {
         const user_name = sessionStorage.getItem('user_name');
         console.log(this);
         console.log(user_name);
         const firebaseService = new FirebaseService();
         const usersRef = firebaseService.database().ref(user_name);
+        console.log(usersRef);
         console.log('NEXT');
         const swalWithBootstrapButtons = swal.mixin({
           confirmButtonClass: 'btn btn-success',
@@ -151,6 +154,7 @@ export class BlocklyComponent implements OnInit {
             // Read more about handling dismissals
             result.dismiss === swal.DismissReason.cancel
           ) {
+            console.log(usersRef);
             swalWithBootstrapButtons(
               'Deleted',
               'Your workspace was successfully deleted',
@@ -160,7 +164,8 @@ export class BlocklyComponent implements OnInit {
         }); }, false);
       /*this is the end of the comment area */
       if (!myEle && '/blockly' === window.location.pathname) {
-        document.body.appendChild(btn);
+        console.log('btttnnnnnnnnnnn', this.btn);
+        document.body.appendChild(this.btn);
       }
     }
   }
