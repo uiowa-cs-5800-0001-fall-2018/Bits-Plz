@@ -100,7 +100,7 @@ export class BlocklyComponent implements OnInit {
   }
 
 
-  loadUserData(firebase, data) {
+  loadUserData(data) {
     const savespace = data.val();
     const keys = Object.keys(savespace);
     console.log(keys);
@@ -119,10 +119,13 @@ export class BlocklyComponent implements OnInit {
 
       const myEle = document.getElementById(name);
       console.log(btn);
-      /*btn.addEventListener('click', () => {
+      /*this is the beginning of the comment area */
+      btn.addEventListener('click', () => {
+        const user_name = sessionStorage.getItem('user_name');
         console.log(this);
         console.log(user_name);
-        const usersRef = this.firebaseService.database().ref(user_name);
+        const firebaseService = new FirebaseService();
+        const usersRef = firebaseService.database().ref(user_name);
         console.log('NEXT');
         const swalWithBootstrapButtons = swal.mixin({
           confirmButtonClass: 'btn btn-success',
@@ -139,9 +142,6 @@ export class BlocklyComponent implements OnInit {
           reverseButtons: false
         }).then((result) => {
           if (result.value) {
-            if (user_name) {
-              usersRef.on('value', this.gotData, this.errData);
-            }
             swalWithBootstrapButtons(
               'Load Complete',
               'Your workspace was successfully loaded.',
@@ -157,8 +157,9 @@ export class BlocklyComponent implements OnInit {
               'success'
             );
           }
-        }); }, false);*/
-      if (!myEle) {
+        }); }, false);
+      /*this is the end of the comment area */
+      if (!myEle && '/blockly' === window.location.pathname) {
         document.body.appendChild(btn);
       }
     }
