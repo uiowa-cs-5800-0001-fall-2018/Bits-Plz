@@ -24,7 +24,7 @@ export class TwitterService {
   constructor() { }
 
   public get_tweets(): Observable<ResultModel[]> {
-    const post_str = 'https://bits-plz-backend.herokuapp.com/search';
+    const post_str = 'https://bits-plz-backend.herokuapp.com/search';//?keyword=hi
     return new Observable(ob => {
       request.post(post_str, (error, response, body) => { // 'body': string is the actual content
         ob.next(parseJson(body));

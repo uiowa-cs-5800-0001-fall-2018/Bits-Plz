@@ -150,7 +150,7 @@ export class BlocksService {
       var number_lon = block.getFieldValue('lon');
       var value_b_twitter = Blockly.JavaScript.valueToCode(block, 'b_twitter', Blockly.JavaScript.ORDER_ATOMIC);
       // TODO: Assemble JavaScript into code variable.
-      var code = 'sources block: ' + value_b_twitter;
+      var code = '?keyword='+text_key_word;
       // TODO: Change ORDER_NONE to the correct strength.
       return [code, Blockly.JavaScript.ORDER_NONE];
     };
@@ -194,7 +194,7 @@ export class BlocksService {
 
   public static show_code(): void {
     // Generate JavaScript code and display it.
-    alert('test\n' + Blockly.JavaScript.workspaceToCode(Blockly.mainWorkspace));
+    alert('https://bits-plz-backend.herokuapp.com/search' + Blockly.JavaScript.workspaceToCode(Blockly.mainWorkspace));
   }
 
 }
