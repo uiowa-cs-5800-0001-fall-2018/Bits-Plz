@@ -135,6 +135,7 @@ export class BlocklyComponent implements OnInit {
     const user_name = sessionStorage.getItem('user_name');
     const usersRef = this.firebaseService.database().ref(user_name);
     usersRef.child(workspace_name).remove().then(() => {});
+    BlocksService.clear();
     swal({
       position: 'center',
       type: 'success',
@@ -150,8 +151,7 @@ export class BlocklyComponent implements OnInit {
     console.log('successfully captured child component: ', resultDisplay);
   }
   run_query(): void {
-    // TODO get_tweets takes a URL query string generated from workspace blocks and respond accordingly
-    this.twitterService.get_tweets().subscribe({
+    this.twitterService.get_tweets(BlocksService.show_code()).subscribe({
       next: x => {
         const distribution = BlocklyComponent.calc_distribution(x);
         this.resultDisplay.update_contents(
@@ -163,9 +163,5 @@ export class BlocklyComponent implements OnInit {
       error: err => console.log('cannot update, ', err),
       complete: () => console.log('query completed')
     });
-  }
-
-  show_code(): void {
-    BlocksService.show_code();
   }
 }
