@@ -1,17 +1,13 @@
 <script src="blockly_compressed.js"></script>
 <script src="javascript_compressed.js"></script>
 <div id="blocklyDiv" style="height: 520px; width: 1200px;" xmlns=""></div>
-<button (click)="save_worksapce()">Save My Workspace!</button>
-<button (click)="restore_workspace()">Load Workspace</button>
-<button (click)="delete_workspace()">Delete Saved Workspace!</button>
+<button (click)="save_workspace()">Save My Workspace!</button>
 <button (click)="run_query()">Run Query!</button>
 <button (click)="show_code()">Show Code!</button>
-<button (click)="loadUserData()">Load User Data</button>
-<ul>
-  <li *ngFor="let b of btn">
-    {{b}}
-  </li>
-</ul>
+<p>saved workspaces:</p>
+<span *ngFor="let btn of workspace_list" (click)="button_callback(btn.name)">
+  <button>{{ btn.name }}</button>
+</span>
 <app-result-display></app-result-display>
 
 
