@@ -24,11 +24,13 @@ export class BlocksService {
     Blockly.Xml.domToWorkspace(Blockly.mainWorkspace, Blockly.Xml.textToDom(xml_string));
   }
 
+  // This functioned gets called from the Blockly Component
   public static show_code(): void {
     // Generate JavaScript code and display it. Displays string as a button alert.
     alert('https://bits-plz-backend.herokuapp.com/search' + Blockly.JavaScript.workspaceToCode(Blockly.mainWorkspace));
   }
 
+  // This is the toolbox
   private static gen_tool_box(): string {
     return `<xml xmlns="http://www.w3.org/1999/xhtml" id="toolbox" style="display: none;">
       <category name="Sentiment Analysis" colour="#5C81A6">
@@ -59,6 +61,7 @@ export class BlocksService {
       }
     };
 
+    // Report Block definition.
     Blockly.Blocks['report'] = {
       init: function () {
         this.appendDummyInput()
@@ -73,6 +76,7 @@ export class BlocksService {
       }
     };
 
+    // Report Block Generator
     Blockly.JavaScript['report'] = function (block) {
       let value_r_source = Blockly.JavaScript.valueToCode(block, 'r_source', Blockly.JavaScript.ORDER_ATOMIC);
       // Assemble JavaScript into code variable.
@@ -80,6 +84,7 @@ export class BlocksService {
       return code;
     };
 
+    // Data Source definition.
     Blockly.Blocks['data_sources'] = {
       init: function () {
         this.appendDummyInput()
@@ -130,6 +135,7 @@ export class BlocksService {
       }
     };
 
+    // Source Twitter Blocky Definition.
     Blockly.Blocks['src_twitter'] = {
       init: function () {
         this.appendDummyInput()
@@ -146,6 +152,7 @@ export class BlocksService {
       }
     };
 
+    // Source Block Generator.
     Blockly.JavaScript['src_twitter'] = function (block) {
       let text_t_input = block.getFieldValue('t_input');
       // TODO: Assemble JavaScript into code variable.
@@ -154,6 +161,7 @@ export class BlocksService {
       return [code, Blockly.JavaScript.ORDER_NONE];
     };
 
+    // Display Block generator.
     Blockly.JavaScript['display'] = function (block) {
       let text_t_input = block.getFieldValue('d_display');
       // TODO: Assemble JavaScript into code variable.
@@ -162,6 +170,7 @@ export class BlocksService {
       return [code, Blockly.JavaScript.ORDER_NONE];
     };
 
+    // Data Source Block generator.
     Blockly.JavaScript['data_sources'] = function (block) {
       let checkbox_include_twitter = block.getFieldValue('include_twitter') == 'TRUE';
       let checkbox_include_yelp = block.getFieldValue('include_yelp') == 'TRUE';
