@@ -77,10 +77,9 @@ export class BlocksService {
 
     // Report Block Generator
     Blockly.JavaScript['report'] = function (block) {
-      let value_r_source = Blockly.JavaScript.valueToCode(block, 'r_source', Blockly.JavaScript.ORDER_ATOMIC);
+      const value_r_source = Blockly.JavaScript.valueToCode(block, 'r_source', Blockly.JavaScript.ORDER_ATOMIC);
       // Assemble JavaScript into code variable.
-      let code = 'Report-Block: ' + value_r_source;
-      return code;
+      return 'Report-Block: ' + value_r_source;
     };
 
     // Data Source definition.
@@ -153,52 +152,38 @@ export class BlocksService {
 
     // Source Block Generator.
     Blockly.JavaScript['src_twitter'] = function (block) {
-      let text_t_input = block.getFieldValue('t_input');
+      const text_t_input = block.getFieldValue('t_input');
       // TODO: Assemble JavaScript into code variable.
-      let code = 'Twitter-block: ' + text_t_input;
+      const code = 'Twitter-block: ' + text_t_input;
       // TODO: Change ORDER_NONE to the correct strength.
       return [code, Blockly.JavaScript.ORDER_NONE];
     };
 
     // Display Block generator.
     Blockly.JavaScript['display'] = function (block) {
-      let text_t_input = block.getFieldValue('d_display');
+      const text_t_input = block.getFieldValue('d_display');
       // TODO: Assemble JavaScript into code variable.
-      let code = 'display-block: ' + text_t_input;
+      const code = 'display-block: ' + text_t_input;
       // TODO: Change ORDER_NONE to the correct strength.
       return [code, Blockly.JavaScript.ORDER_NONE];
     };
 
     // Data Source Block generator.
     Blockly.JavaScript['data_sources'] = function (block) {
-      let checkbox_include_twitter = block.getFieldValue('include_twitter') == 'TRUE';
-      let checkbox_include_yelp = block.getFieldValue('include_yelp') == 'TRUE';
-      let checkbox_include_google_review = block.getFieldValue('include_google_review') == 'TRUE';
-      let text_key_word = block.getFieldValue('key_word');
-      let number_num_entries = block.getFieldValue('num_entries');
-      let number_radius = block.getFieldValue('radius');
-      let number_lat = block.getFieldValue('lat');
-      let number_lon = block.getFieldValue('lon');
-      let value_b_twitter = Blockly.JavaScript.valueToCode(block, 'b_twitter', Blockly.JavaScript.ORDER_ATOMIC);
+      // const checkbox_include_twitter = block.getFieldValue('include_twitter') == 'TRUE';
+      // const checkbox_include_yelp = block.getFieldValue('include_yelp') == 'TRUE';
+      // const checkbox_include_google_review = block.getFieldValue('include_google_review') == 'TRUE';
+      const text_key_word = block.getFieldValue('key_word');
+      const num_entries = block.getFieldValue('num_entries');
+      // const number_radius = block.getFieldValue('radius');
+      // const number_lat = block.getFieldValue('lat');
+      // const number_lon = block.getFieldValue('lon');
+      // const value_b_twitter = Blockly.JavaScript.valueToCode(block, 'b_twitter', Blockly.JavaScript.ORDER_ATOMIC);
       // Assemble JavaScript into code variable.
-      let code = '?keyword=' + text_key_word;
+      const code = `?keyword=${text_key_word}&count=${num_entries}`;
       // Change ORDER_NONE to the correct strength.
       return [code, Blockly.JavaScript.ORDER_NONE];
     };
-  }
-
-  private static gen_query_string(
-    include_twitter: boolean = false,
-    include_yelp: boolean = false,
-    include_google_review: boolean = false,
-    key_word: string = 'UIowa',
-    num: number = 15,
-    lat: number = 41.6611,
-    lon: number = 91.5302,
-    radius: number = 50
-  ): string {
-
-    return '0';
   }
 
   private static gen_generators(): void {
