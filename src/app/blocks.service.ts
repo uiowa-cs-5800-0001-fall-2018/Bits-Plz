@@ -24,9 +24,11 @@ export class BlocksService {
   }
 
   // This functioned gets called from the Blockly Component
-  public static show_code(): void {
+  public static show_code(): string {
     // Generate JavaScript code and display it. Displays string as a button alert.
-    alert('https://bits-plz-backend.herokuapp.com/search' + Blockly.JavaScript.workspaceToCode(Blockly.mainWorkspace));
+    const code = 'https://bits-plz-backend.herokuapp.com/search' + Blockly.JavaScript.workspaceToCode(Blockly.mainWorkspace);
+    alert(code);
+    return code;
   }
 
   // This is the toolbox
