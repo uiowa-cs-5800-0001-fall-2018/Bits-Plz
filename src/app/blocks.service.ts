@@ -1,10 +1,33 @@
-import { Injectable } from '@angular/core';
+import {Injectable} from '@angular/core';
+
 declare var Blockly: any;
 
 @Injectable()
 export class BlocksService {
 
-  constructor() { }
+  constructor() {
+  }
+
+  public static inject_blocks(div_name: string) {
+    BlocksService.gen_blocks();
+    BlocksService.gen_generators();
+    // noinspection TypeScriptValidateJSTypes
+    Blockly.inject(div_name, {toolbox: BlocksService.gen_tool_box()});
+  }
+
+  public static workspace_to_xml_string(): string {
+    return Blockly.Xml.domToText(Blockly.Xml.workspaceToDom(Blockly.mainWorkspace));
+  }
+
+  public static xml_string_to_workspace(xml_string: string): void {
+    Blockly.mainWorkspace.clear();
+    Blockly.Xml.domToWorkspace(Blockly.mainWorkspace, Blockly.Xml.textToDom(xml_string));
+  }
+
+  public static show_code(): void {
+    // Generate JavaScript code and display it. Displays string as a button alert.
+    alert('https://bits-plz-backend.herokuapp.com/search' + Blockly.JavaScript.workspaceToCode(Blockly.mainWorkspace));
+  }
 
   private static gen_tool_box(): string {
     return `<xml xmlns="http://www.w3.org/1999/xhtml" id="toolbox" style="display: none;">
@@ -19,7 +42,7 @@ export class BlocksService {
 
   private static gen_blocks(): void {
     Blockly.Blocks['display'] = {
-      init: function() {
+      init: function () {
         this.appendValueInput('d_display')
           .setCheck(null)
           .appendField('display:');
@@ -37,7 +60,7 @@ export class BlocksService {
     };
 
     Blockly.Blocks['report'] = {
-      init: function() {
+      init: function () {
         this.appendDummyInput()
           .setAlign(Blockly.ALIGN_CENTRE)
           .appendField('REPORT');
@@ -50,15 +73,15 @@ export class BlocksService {
       }
     };
 
-    Blockly.JavaScript['report'] = function(block) {
-      var value_r_source = Blockly.JavaScript.valueToCode(block, 'r_source', Blockly.JavaScript.ORDER_ATOMIC);
-      // TODO: Assemble JavaScript into code variable.
-      var code = 'Report-Block: ' + value_r_source;
+    Blockly.JavaScript['report'] = function (block) {
+      let value_r_source = Blockly.JavaScript.valueToCode(block, 'r_source', Blockly.JavaScript.ORDER_ATOMIC);
+      // Assemble JavaScript into code variable.
+      let code = 'Report-Block: ' + value_r_source;
       return code;
     };
 
     Blockly.Blocks['data_sources'] = {
-      init: function() {
+      init: function () {
         this.appendDummyInput()
           .appendField('data sources');
         this.appendDummyInput()
@@ -108,7 +131,7 @@ export class BlocksService {
     };
 
     Blockly.Blocks['src_twitter'] = {
-      init: function() {
+      init: function () {
         this.appendDummyInput()
           .appendField(new Blockly.FieldImage('http://www.transparentpng.com/thumb/twitter/twitter-transparent-images--7.png', 15, 15,
             'Twitter'))
@@ -123,35 +146,35 @@ export class BlocksService {
       }
     };
 
-    Blockly.JavaScript['src_twitter'] = function(block) {
-      var text_t_input = block.getFieldValue('t_input');
+    Blockly.JavaScript['src_twitter'] = function (block) {
+      let text_t_input = block.getFieldValue('t_input');
       // TODO: Assemble JavaScript into code variable.
-      var code = 'Twitter-block: ' + text_t_input;
+      let code = 'Twitter-block: ' + text_t_input;
       // TODO: Change ORDER_NONE to the correct strength.
       return [code, Blockly.JavaScript.ORDER_NONE];
     };
 
-    Blockly.JavaScript['display'] = function(block) {
-      var text_t_input = block.getFieldValue('d_display');
+    Blockly.JavaScript['display'] = function (block) {
+      let text_t_input = block.getFieldValue('d_display');
       // TODO: Assemble JavaScript into code variable.
-      var code = 'display-block: ' + text_t_input;
+      let code = 'display-block: ' + text_t_input;
       // TODO: Change ORDER_NONE to the correct strength.
       return [code, Blockly.JavaScript.ORDER_NONE];
     };
 
-    Blockly.JavaScript['data_sources'] = function(block) {
-      var checkbox_include_twitter = block.getFieldValue('include_twitter') == 'TRUE';
-      var checkbox_include_yelp = block.getFieldValue('include_yelp') == 'TRUE';
-      var checkbox_include_google_review = block.getFieldValue('include_google_review') == 'TRUE';
-      var text_key_word = block.getFieldValue('key_word');
-      var number_num_entries = block.getFieldValue('num_entries');
-      var number_radius = block.getFieldValue('radius');
-      var number_lat = block.getFieldValue('lat');
-      var number_lon = block.getFieldValue('lon');
-      var value_b_twitter = Blockly.JavaScript.valueToCode(block, 'b_twitter', Blockly.JavaScript.ORDER_ATOMIC);
-      // TODO: Assemble JavaScript into code variable.
-      var code = '?keyword='+text_key_word;
-      // TODO: Change ORDER_NONE to the correct strength.
+    Blockly.JavaScript['data_sources'] = function (block) {
+      let checkbox_include_twitter = block.getFieldValue('include_twitter') == 'TRUE';
+      let checkbox_include_yelp = block.getFieldValue('include_yelp') == 'TRUE';
+      let checkbox_include_google_review = block.getFieldValue('include_google_review') == 'TRUE';
+      let text_key_word = block.getFieldValue('key_word');
+      let number_num_entries = block.getFieldValue('num_entries');
+      let number_radius = block.getFieldValue('radius');
+      let number_lat = block.getFieldValue('lat');
+      let number_lon = block.getFieldValue('lon');
+      let value_b_twitter = Blockly.JavaScript.valueToCode(block, 'b_twitter', Blockly.JavaScript.ORDER_ATOMIC);
+      // Assemble JavaScript into code variable.
+      let code = '?keyword=' + text_key_word;
+      // Change ORDER_NONE to the correct strength.
       return [code, Blockly.JavaScript.ORDER_NONE];
     };
   }
@@ -170,31 +193,8 @@ export class BlocksService {
     return '0';
   }
 
-
   private static gen_generators(): void {
 
-  }
-
-  public static inject_blocks(div_name: string) {
-    BlocksService.gen_blocks();
-    BlocksService.gen_generators();
-    // noinspection TypeScriptValidateJSTypes
-    Blockly.inject(div_name, {toolbox: BlocksService.gen_tool_box()});
-  }
-
-
-  public static workspace_to_xml_string(): string {
-    return Blockly.Xml.domToText(Blockly.Xml.workspaceToDom(Blockly.mainWorkspace));
-  }
-
-  public static xml_string_to_workspace(xml_string: string): void {
-    Blockly.mainWorkspace.clear();
-    Blockly.Xml.domToWorkspace(Blockly.mainWorkspace, Blockly.Xml.textToDom(xml_string));
-  }
-
-  public static show_code(): void {
-    // Generate JavaScript code and display it.
-    alert('https://bits-plz-backend.herokuapp.com/search' + Blockly.JavaScript.workspaceToCode(Blockly.mainWorkspace));
   }
 
 }
