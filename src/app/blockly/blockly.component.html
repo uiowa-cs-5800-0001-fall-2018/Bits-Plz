@@ -1,6 +1,41 @@
 <script src="blockly_compressed.js"></script>
+//<script src = "blocks_compressed.js"></script>
 <script src="javascript_compressed.js"></script>
-<div id="blocklyDiv" style="height: 520px; width: 1200px;" xmlns=""></div>
+<div id="blocklyArea" style="height: 520px; width: 1200px;" ></div>
+<div id="blocklyDiv" style="position: absolute"></div>
+<script>
+  var toolbox = '<xml>';
+  toolbox += '  <block type="controls_if"></block>';
+  toolbox += '  <block type="controls_whileUntil"></block>';
+
+</script>
+<script>
+  var blocklyArea = document.getElementById('blocklyArea');
+  var blocklyDiv = document.getElementById('blocklyDiv');
+  var workspace = Blockly.inject(blocklyDiv,
+    {toolbox: document.getElementById('toolbox')});
+  var onresize = function(e) {
+    // Compute the absolute coordinates and dimensions of blocklyArea.
+    var element = blocklyArea;
+    var x = 0;
+    var y = 0;
+    do {
+      x += element.offsetLeft;
+      y += element.offsetTop;
+      element = element.offsetParent;
+    } while (element);
+    // Position blocklyDiv over blocklyArea.
+    blocklyDiv.style.left = x + 'px';
+    blocklyDiv.style.top = y + 'px';
+    blocklyDiv.style.width = blocklyArea.offsetWidth + 'px';
+    blocklyDiv.style.height = blocklyArea.offsetHeight + 'px';
+    Blockly.svgResize(workspace);
+  };
+  window.addEventListener('resize', onresize, false);
+  onresize();
+  Blockly.svgResize(workspace);
+</script>
+
 <button (click)="save_worksapce()">Save My Workspace!</button>
 <button (click)="restore_workspace()">Load Workspace</button>
 <button (click)="delete_workspace()">Delete Saved Workspace!</button>
