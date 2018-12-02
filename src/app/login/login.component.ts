@@ -20,12 +20,14 @@ export class LoginComponent implements OnInit {
     this.start_ui();
   }
 
+
   start_ui(): void {
     if (this.user_name === null) {
       this.firebase_service.get_login_ui().start(
         '#firebaseui-auth-container',
         this.firebase_service.get_config()
       );
+
     }
   }
 
@@ -39,5 +41,8 @@ export class LoginComponent implements OnInit {
     sessionStorage.clear();
     this.user_name = undefined;
     this.user_email = undefined;
+    swal(
+      'Logout Successful'
+    );
   }
 }

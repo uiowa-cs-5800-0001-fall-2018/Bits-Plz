@@ -73,8 +73,9 @@
 <!-- User logged in -->
 <ng-template #logged_in>
   <pre>
-    You are logged in as {{user_name}}.
-    Your login email is {{user_email}}.
+    Status: Logged In
+    Username: {{user_name}}.
+    User Email: {{user_email}}.
     <button (click)="logout()">Logout</button>
   </pre>
 </ng-template>
