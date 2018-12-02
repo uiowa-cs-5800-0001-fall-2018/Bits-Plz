@@ -164,8 +164,4 @@ export class BlocklyComponent implements OnInit {
       complete: () => console.log('query completed')
     });
   }
-
-  show_code(): void {
-    BlocksService.show_code();
-  }
 }
