@@ -158,5 +158,7 @@ export class BlocksService {
     Blockly.Xml.domToWorkspace(Blockly.mainWorkspace, Blockly.Xml.textToDom(xml_string));
   }
 
-
+  public static clear() {
+    Blockly.mainWorkspace.clear();
+  }
 }

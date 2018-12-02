@@ -135,6 +135,7 @@ export class BlocklyComponent implements OnInit {
     const user_name = sessionStorage.getItem('user_name');
     const usersRef = this.firebaseService.database().ref(user_name);
     usersRef.child(workspace_name).remove().then(() => {});
+    BlocksService.clear();
     swal({
       position: 'center',
       type: 'success',
