@@ -5,14 +5,7 @@ import {TwitterService} from '../services/twitter.service';
 import {ResultModel} from '../services/result.model';
 import {ResultDisplayComponent} from '../result-display/result-display.component';
 import {BlocksService} from '../blocks.service';
-/*
-import * as _swal from 'sweetalert';
-import { SweetAlert } from 'sweetalert/typings/core';
-const swal: SweetAlert = _swal as any;
-*/
 import swal from 'sweetalert2';
-
-import {createElement} from '@angular/core/src/view/element';
 
 
 @Component({
@@ -23,6 +16,7 @@ import {createElement} from '@angular/core/src/view/element';
 export class BlocklyComponent implements OnInit {
 
   resultDisplay;
+  workspace_list: {id, name}[];
 
   constructor(
     private flashMessagesService: FlashMessagesService,
@@ -56,19 +50,26 @@ export class BlocklyComponent implements OnInit {
     const user_name = sessionStorage.getItem('user_name');
     const usersRef = this.firebaseService.database().ref(user_name);
     BlocksService.inject_blocks('blocklyDiv');
-    usersRef.on('value', this.loadUserData, this.errData);
+    usersRef.on('value', (data) => {
+        this.workspace_list = [];  // TODO add just the workspace changed (O(1) time, currently O(n))
+        const savespace = data.val();
+        const keys = Object.keys(savespace);
+        for (let i = 0; i < keys.length; i++) {
+          const k = keys[i];
+          const name = savespace[k].name;
+          this.workspace_list.push( { 'id': i, 'name': name} );
+        }
+    }, (err) => {
+      console.log(err);
+    });
   }
 
-  buttonEvent() {
-    const user_name = sessionStorage.getItem('user_name');
-    const usersRef = this.firebaseService.database().ref(user_name);
-
+  button_callback(workspace_name: string) {
     const swalWithBootstrapButtons = swal.mixin({
       confirmButtonClass: 'btn btn-success',
       cancelButtonClass: 'btn btn-danger',
       buttonsStyling: false,
     });
-
     swalWithBootstrapButtons({
       title: 'What would you like to do with this workspace?',
       showCancelButton: true,
@@ -78,139 +79,28 @@ export class BlocklyComponent implements OnInit {
       reverseButtons: false
     }).then((result) => {
       if (result.value) {
-        if (user_name) {
-          usersRef.on('value', this.gotData, this.errData);
-        }
+        const ref = sessionStorage.getItem('user_name') + '/' + workspace_name;
+        this.firebaseService.database().ref(ref).once('value')
+          .then((dataSnapshot) => {
+            BlocksService.xml_string_to_workspace(dataSnapshot.val().workspace);
+          });
         swalWithBootstrapButtons(
           'Load Complete',
           'Your workspace was successfully loaded.',
           'success'
-        );
-      } else if (
-        // Read more about handling dismissals
-        result.dismiss === swal.DismissReason.cancel
-      ) {
+        ).then(() => {});
+      } else if (result.dismiss === swal.DismissReason.cancel) { // Read more about handling dismissals
+        this.delete_workspace(workspace_name).then(() => {});
         swalWithBootstrapButtons(
           'Deleted',
           'Your workspace was successfully deleted',
           'success'
-        );
+        ).then(() => {});
       }
     });
   }
 
-
-  loadUserData(data) {
-    const savespace = data.val();
-    const keys = Object.keys(savespace);
-    console.log(keys);
-    for (let i = 0; i < keys.length; i++) {
-      const k = keys[i];
-      const name = savespace[k].name;
-      const workspace = savespace[k].workspace;
-      console.log(workspace);
-      console.log(name);
-
-      const btn = document.createElement('BUTTON');
-      const t = document.createTextNode(name);
-      btn.setAttribute('id', name);
-      console.log(name);
-      btn.appendChild(t);
-
-      const myEle = document.getElementById(name);
-      console.log(btn);
-      /*this is the beginning of the comment area */
-      btn.addEventListener('click', () => {
-        const user_name = sessionStorage.getItem('user_name');
-        console.log(this);
-        console.log(user_name);
-        const firebaseService = new FirebaseService();
-        const usersRef = firebaseService.database().ref(user_name);
-        console.log('NEXT');
-        const swalWithBootstrapButtons = swal.mixin({
-          confirmButtonClass: 'btn btn-success',
-          cancelButtonClass: 'btn btn-danger',
-          buttonsStyling: false,
-        });
-
-        swalWithBootstrapButtons({
-          title: 'What would you like to do with this workspace?',
-          showCancelButton: true,
-          confirmButtonText: 'Load',
-          showCloseButton: true,
-          cancelButtonText: 'Delete',
-          reverseButtons: false
-        }).then((result) => {
-          if (result.value) {
-            swalWithBootstrapButtons(
-              'Load Complete',
-              'Your workspace was successfully loaded.',
-              'success'
-            );
-          } else if (
-            // Read more about handling dismissals
-            result.dismiss === swal.DismissReason.cancel
-          ) {
-            swalWithBootstrapButtons(
-              'Deleted',
-              'Your workspace was successfully deleted',
-              'success'
-            );
-          }
-        }); }, false);
-      /*this is the end of the comment area */
-      if (!myEle && '/blockly' === window.location.pathname) {
-        document.body.appendChild(btn);
-      }
-    }
-  }
-
-  async gotData(data) {
-    const {value: save} = await swal({
-      title: 'Which workspace would you like to load?',
-      input: 'text',
-      showCancelButton: true,
-      inputValidator: (value) => {
-        return !value && 'You need to write something!';
-      }
-    });
-
-    const savespace = data.val();
-    const keys = Object.keys(savespace);
-    console.log(keys);
-    for (let i = 0; i < keys.length; i++) {
-      const k = keys[i];
-      const name = savespace[k].name;
-      const workspace = savespace[k].workspace;
-      console.log(name);
-      console.log(workspace);
-     if (name === save) {
-        BlocksService.xml_string_to_workspace(workspace);
-      }
-      swal({
-        position: 'center',
-        type: 'success',
-        title: 'Your work has been loaded',
-        showConfirmButton: false,
-        timer: 1500
-      });
-    }
-  }
-
-  errData(err) {
-    console.log('Error!');
-    console.log(err);
-  }
-
-
-  add(text) {
-    const btn = document.createElement('BUTTON');
-    const t = document.createTextNode(text);
-    btn.appendChild(t);
-    document.body.appendChild(btn);
-  }
-
-  async save_worksapce() {
+  async save_workspace() {
     const {value: workspace} = await swal({
       title: 'What name would you like to save this workspace as?',
       input: 'text',
@@ -225,7 +115,7 @@ export class BlocklyComponent implements OnInit {
     const user_name = sessionStorage.getItem('user_name');
     const usersRef = this.firebaseService.database().ref(user_name + '/' + workspace);
     if (user_name && workspace != null) {
-      const userRef = usersRef.set({
+      usersRef.set({
         name: workspace,
         workspace: BlocksService.workspace_to_xml_string()
       }).then(() => this.flashMessagesService.show(msg_success, {timeout: 10000}));
@@ -235,42 +125,23 @@ export class BlocklyComponent implements OnInit {
         title: 'Your work has been saved',
         showConfirmButton: false,
         timer: 1500
-      });
+      }).then(() => {});
     } else {
       this.flashMessagesService.show(msg_fail, {timeout: 10000});
     }
   }
 
-  restore_workspace(): void {
-    const msg_success = 'successfully restored last saved workspace!';
-    const msg_fail = 'you need to login first';
+  async delete_workspace(workspace_name: string) {
     const user_name = sessionStorage.getItem('user_name');
     const usersRef = this.firebaseService.database().ref(user_name);
-
-    if (user_name) {
-      usersRef.on('value', this.gotData, this.errData);
-    }
-  }
-
-  async delete_workspace() {
-    const user_name = sessionStorage.getItem('user_name');
-    const usersRef = this.firebaseService.database().ref(user_name);
-    const {value: workspace} = await swal({
-      title: 'Which workspace would you like to delete?',
-      input: 'text',
-      showCancelButton: true,
-      inputValidator: (value) => {
-        return !value && 'You need to write something!';
-      }
-    });
-    usersRef.child(workspace).remove();
+    usersRef.child(workspace_name).remove().then(() => {});
     swal({
       position: 'center',
       type: 'success',
       title: 'Your work has been deleted',
       showConfirmButton: false,
       timer: 1500
-    });
+    }).then(() => {});
   }
 
   @ViewChild(ResultDisplayComponent)
@@ -294,11 +165,7 @@ export class BlocklyComponent implements OnInit {
     });
   }
 
-
   show_code(): void {
-    // Generate JavaScript code and display it.
     BlocksService.show_code();
   }
-
-
 }
