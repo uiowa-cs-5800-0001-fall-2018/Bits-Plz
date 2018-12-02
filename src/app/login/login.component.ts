@@ -1,5 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import {FirebaseService} from '../services/firebase.service';
+import swal from 'sweetalert2';
 
 @Component({
   selector: 'app-login',
