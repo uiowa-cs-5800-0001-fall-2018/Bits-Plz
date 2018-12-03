@@ -7,6 +7,7 @@ import {ResultDisplayComponent} from '../result-display/result-display.component
 import {BlocksService} from '../blocks.service';
 import swal from 'sweetalert2';
 import * as $ from 'jquery';
+import {Observable} from 'rxjs/Observable';
 
 
 @Component({
@@ -36,6 +37,51 @@ export class BlocklyComponent implements OnInit {
 
   }
 
+  private get_all_subscriptions(name: string): Observable<string[]> {
+    const res: string[] = [];
+    const exp_name = `${sessionStorage.getItem('user_name')}-${name}`;
+    return Observable.create(async ob => {
+      for (const option in this.SUBSCRIBE_OPTIONS) {
+        await this.firebaseService.database().ref(`auto notifications/${option}`)
+          .once('value', (snapshot) => {
+          if (snapshot.hasChild(exp_name)) {
+            res.push(option);
+          }
+        }).then();
+      }
+      ob.next(res);
+      ob.complete();
+    });
+  }
+
+  private unsubscribe(name: string) {
+    this.get_all_subscriptions(name).subscribe({
+      next: intervals => {
+        const input_options = {};
+        for (const interval of intervals) {
+          input_options[interval] = interval;
+        }
+        swal({
+          title: 'Which notification interval would you like to unsubscribe?',
+          input: 'select',
+          inputOptions: input_options,
+          inputPlaceholder: 'Select an interval to unsubscribe',
+          showCancelButton: true,
+          inputValidator: value => {
+            return new Promise((resolve) => {
+              this.firebaseService.database().
+                ref(`auto notifications/${value}/${sessionStorage.getItem('user_name')}-${name}`)
+                .remove().then();
+              resolve();
+            });
+          }
+        }).then(() => { BlocklyComponent.swal_notice('Successfully Unsubscribed'); });
+      },
+      error: err => { console.log(err); },
+      complete: () => {}
+    });
+  }
+
   private static calc_distribution(arr: ResultModel[]) {
     let positive = 0;
     let negative = 0;
@@ -56,8 +102,8 @@ export class BlocklyComponent implements OnInit {
     };
   }
 
-  private static swal_notice(notice: string): void {
-    swal('Success!', notice, 'success').then();
+  private static swal_notice(notice: string): Promise<any> {
+    return swal('Success!', notice, 'success');
   }
 
   ngOnInit() {
@@ -92,7 +138,7 @@ export class BlocklyComponent implements OnInit {
     const usersRef = this.firebaseService.database().ref(user_name);
     usersRef.child(workspace_name).remove().then();
     BlocksService.clear();
-    BlocklyComponent.swal_notice('Your workspace has been deleted');
+    BlocklyComponent.swal_notice('Your workspace has been deleted').then();
   }
 
   async save_workspace() {
@@ -114,9 +160,9 @@ export class BlocklyComponent implements OnInit {
         name: workspace,
         workspace: BlocksService.workspace_to_xml_string()
       }).then();
-      BlocklyComponent.swal_notice(this.MSG_SUCCESS);
+      BlocklyComponent.swal_notice(this.MSG_SUCCESS).then();
     } else {
-      BlocklyComponent.swal_notice(this.NEED_LOGIN);
+      BlocklyComponent.swal_notice(this.NEED_LOGIN).then();
     }
   }
 
@@ -126,11 +172,6 @@ export class BlocklyComponent implements OnInit {
     });
     $(document).on('click', '.SwalBtn2', () => {
       this.delete_workspace(workspace_name).then();
-      swal(
-        'Success!',
-        'Workspace successfully deleted!',
-        'success'
-      ).then();
     });
     $(document).on('click', '.SwalBtn3', () => {
       swal({
@@ -151,10 +192,11 @@ export class BlocklyComponent implements OnInit {
             if (!value) {
               resolve('You must select an interval');
             } else if (value === 'unsubscribe') {
-              for (const option in this.SUBSCRIBE_OPTIONS) {
-                db.ref(`auto notifications/${option}/${user_name}-${workspace_name}`).remove().then();
-              }
-              BlocklyComponent.swal_notice('Successfully Unsubscribed');
+              // for (const option in this.SUBSCRIBE_OPTIONS) {
+              //   db.ref(`auto notifications/${option}/${user_name}-${workspace_name}`).remove().then();
+              // }
+              this.unsubscribe(workspace_name);
+              // BlocklyComponent.swal_notice('Successfully Unsubscribed').then();
             } else {
               const ob = {
                 keyword: null,
@@ -175,11 +217,7 @@ export class BlocklyComponent implements OnInit {
                   email: user_email
                 }).then();
               });
-              swal(
-                'Success!',
-                'Your notifications were successfully setup',
-                'success'
-              ).then(function() { resolve(); });
+              BlocklyComponent.swal_notice('Your notifications were successfully setup').then(() => { resolve(); });
             }
           });
         }
