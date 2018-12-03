@@ -65,18 +65,62 @@ export class BlocklyComponent implements OnInit {
     });
   }
 
+  private static swal_notice(notice: string): void {
+    swal('Success!', notice, 'success').then();
+  }
+
+  private load_workspace(name: string): void {
+    const ref = sessionStorage.getItem('user_name') + '/' + name;
+    this.firebaseService.database().ref(ref).once('value')
+      .then((dataSnapshot) => {
+        BlocksService.xml_string_to_workspace(dataSnapshot.val().workspace);
+      });
+    BlocklyComponent.swal_notice('Your workspace was loaded successfully');
+  }
+
+  private async delete_workspace(workspace_name: string) {
+    const user_name = sessionStorage.getItem('user_name');
+    const usersRef = this.firebaseService.database().ref(user_name);
+    usersRef.child(workspace_name).remove().then();
+    BlocksService.clear();
+    BlocklyComponent.swal_notice('Your work has been deleted');
+  }
+
+  async save_workspace() {
+    const {value: workspace} = await swal({
+      title: 'What name would you like to save this workspace as?',
+      input: 'text',
+      showCancelButton: true,
+      inputValidator: (value) => {
+        return !value && 'You need to write something!';
+      }
+    });
+
+    const msg_success = 'Successfully saved';
+    const msg_fail = 'you need to login first';
+    const user_name = sessionStorage.getItem('user_name');
+    const usersRef = this.firebaseService.database().ref(user_name + '/' + workspace);
+    if (user_name && workspace != null) {
+      usersRef.set({
+        name: workspace,
+        workspace: BlocksService.workspace_to_xml_string()
+      }).then(() => this.flashMessagesService.show(msg_success, {timeout: 10000}));
+      swal({
+        position: 'center',
+        type: 'success',
+        title: 'Your work has been saved',
+        showConfirmButton: false,
+        timer: 1500
+      }).then(() => {
+      });
+    } else {
+      this.flashMessagesService.show(msg_fail, {timeout: 10000});
+    }
+  }
+
   button_callback(workspace_name: string) {
     $(document).on('click', '.SwalBtn1', () => {
-      const ref = sessionStorage.getItem('user_name') + '/' + workspace_name;
-      this.firebaseService.database().ref(ref).once('value')
-        .then((dataSnapshot) => {
-          BlocksService.xml_string_to_workspace(dataSnapshot.val().workspace);
-        });
-      swal(
-        'Success!',
-        'Your workspace was loaded successfully',
-        'success'
-      ).then();
+      this.load_workspace(workspace_name);
     });
     $(document).on('click', '.SwalBtn2', () => {
       this.delete_workspace(workspace_name).then();
@@ -155,53 +199,6 @@ export class BlocklyComponent implements OnInit {
         '<button type="button" role="button" tabindex="0" class="SwalBtn3 customSwalBtn">' + 'Set Up Notifications' + '</button>',
       showCancelButton: false,
       showConfirmButton: false
-    }).then();
-  }
-
-  async save_workspace() {
-    const {value: workspace} = await swal({
-      title: 'What name would you like to save this workspace as?',
-      input: 'text',
-      showCancelButton: true,
-      inputValidator: (value) => {
-        return !value && 'You need to write something!';
-      }
-    });
-
-    const msg_success = 'Successfully saved';
-    const msg_fail = 'you need to login first';
-    const user_name = sessionStorage.getItem('user_name');
-    const usersRef = this.firebaseService.database().ref(user_name + '/' + workspace);
-    if (user_name && workspace != null) {
-      usersRef.set({
-        name: workspace,
-        workspace: BlocksService.workspace_to_xml_string()
-      }).then(() => this.flashMessagesService.show(msg_success, {timeout: 10000}));
-      swal({
-        position: 'center',
-        type: 'success',
-        title: 'Your work has been saved',
-        showConfirmButton: false,
-        timer: 1500
-      }).then(() => {
-      });
-    } else {
-      this.flashMessagesService.show(msg_fail, {timeout: 10000});
-    }
-  }
-
-  async delete_workspace(workspace_name: string) {
-    const user_name = sessionStorage.getItem('user_name');
-    const usersRef = this.firebaseService.database().ref(user_name);
-    usersRef.child(workspace_name).remove().then(() => {
-    });
-    BlocksService.clear();
-    swal({
-      position: 'center',
-      type: 'success',
-      title: 'Your work has been deleted',
-      showConfirmButton: false,
-      timer: 1500
     }).then();
   }
 
