@@ -6,6 +6,7 @@ import {ResultModel} from '../services/result.model';
 import {ResultDisplayComponent} from '../result-display/result-display.component';
 import {BlocksService} from '../blocks.service';
 import swal from 'sweetalert2';
+import {forEach} from '@angular/router/src/utils/collection';
 
 
 @Component({
@@ -17,6 +18,7 @@ export class BlocklyComponent implements OnInit {
 
   resultDisplay;
   workspace_list: {id, name}[];
+  tweet_list: {content}[];
 
   constructor(
     private flashMessagesService: FlashMessagesService,
@@ -159,6 +161,11 @@ export class BlocklyComponent implements OnInit {
           distribution.negative,
           distribution.neutral
         );
+        this.tweet_list = [];
+        for (let i = 0; i < x.length; i++) {
+          console.log(x[i].content);
+          this.tweet_list.push( { 'content': x[i].content} );
+        }
       },
       error: err => console.log('cannot update, ', err),
       complete: () => console.log('query completed')
