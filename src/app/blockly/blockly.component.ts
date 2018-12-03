@@ -78,11 +78,10 @@ export class BlocklyComponent implements OnInit {
                 ref(`auto notifications/${value}/${sessionStorage.getItem('user_name')}-${name}`)
                 .remove().then();
               resolve();
-
             });
           }
         }).then(() => {
-          if ('unsubscribed') {
+          if (unsubscribed) {
             BlocklyComponent.swal_error('No unsubscription was made');
           } else {
             BlocklyComponent.swal_notice('Successfully Unsubscribed');
@@ -210,11 +209,7 @@ export class BlocklyComponent implements OnInit {
             if (!value) {
               resolve('You must select an interval');
             } else if (value === 'unsubscribe') {
-              // for (const option in this.SUBSCRIBE_OPTIONS) {
-              //   db.ref(`auto notifications/${option}/${user_name}-${workspace_name}`).remove().then();
-              // }
               this.unsubscribe(workspace_name);
-              // BlocklyComponent.swal_notice('Successfully Unsubscribed').then();
             } else {
               const ob = {
                 keyword: null,
@@ -236,6 +231,7 @@ export class BlocklyComponent implements OnInit {
                 }).then();
               });
               BlocklyComponent.swal_notice('Your notifications were successfully setup').then(() => { resolve(); });
+              this.twitterService.sample_email(ob.keyword, ob.count, sessionStorage.getItem('user_email'));
             }
           });
         }
