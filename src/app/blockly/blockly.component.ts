@@ -176,17 +176,13 @@ export class BlocklyComponent implements OnInit {
         inputValidator: (value) => {
           return !value && 'You need to write something!';
         }
-      });
-      if (workspace) {
+      }).then();
         const usersRef = this.firebaseService.database().ref(user_name + '/' + workspace);
         usersRef.set({
           name: workspace,
           workspace: BlocksService.workspace_to_xml_string()
-        }).then();
-        BlocklyComponent.swal_notice(this.MSG_SUCCESS).then();
-      } else {
-        BlocklyComponent.swal_notice(this.INVALID_NAME).then();
-      }
+        }).then(() => BlocklyComponent.swal_notice(this.MSG_SUCCESS));
+
     } else {
       BlocklyComponent.swal_error(this.NEED_LOGIN).then();
     }
