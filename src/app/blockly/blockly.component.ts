@@ -20,6 +20,13 @@ export class BlocklyComponent implements OnInit {
   workspace_list: { id, name }[];
   MSG_SUCCESS = 'Your work has been saved';
   NEED_LOGIN = 'you need to login first';
+  SUBSCRIBE_OPTIONS = {
+    'unsubscribe': 'unsubscribe',
+    'hourly': 'Hourly',
+    'daily': 'Daily',
+    'weekly': 'Weekly',
+    'monthly': 'Monthly'
+  };
 
   constructor(
     private flashMessagesService: FlashMessagesService,
@@ -85,7 +92,7 @@ export class BlocklyComponent implements OnInit {
     const usersRef = this.firebaseService.database().ref(user_name);
     usersRef.child(workspace_name).remove().then();
     BlocksService.clear();
-    BlocklyComponent.swal_notice('Your work has been deleted');
+    BlocklyComponent.swal_notice('Your workspace has been deleted');
   }
 
   async save_workspace() {
@@ -129,25 +136,26 @@ export class BlocklyComponent implements OnInit {
       swal({
         title: 'Select Notification Intervals',
         input: 'select',
-        inputOptions: {
-          'hourly': 'Hourly',
-          'daily': 'Daily',
-          'weekly': 'Weekly',
-          'monthly': 'Monthly'
-        },
+        inputOptions: this.SUBSCRIBE_OPTIONS,
         inputPlaceholder: 'Select an Interval',
         showCancelButton: true,
         inputValidator: (value) => {
           return new Promise(async (resolve) => {
+
+            const db = this.firebaseService.database();
+            const user_name = sessionStorage.getItem('user_name');
+            const user_email = sessionStorage.getItem('user_email');
+            const note_ref_str = `auto notifications/${value}/${user_name}-${workspace_name}`;
+            const workspace_ref_str = `${user_name}/${workspace_name}`;
+
             if (!value) {
               resolve('You must select an interval');
+            } else if (value === 'unsubscribe') {
+              for (const option in this.SUBSCRIBE_OPTIONS) {
+                db.ref(`auto notifications/${option}/${user_name}-${workspace_name}`).remove().then();
+              }
+              BlocklyComponent.swal_notice('Successfully Unsubscribed');
             } else {
-              const db = this.firebaseService.database();
-              const user_name = sessionStorage.getItem('user_name');
-              const user_email = sessionStorage.getItem('user_email');
-              const note_ref_str = `auto notifications/${value}/${user_name}-${workspace_name}`;
-              const workspace_ref_str = `${user_name}/${workspace_name}`;
-
               const ob = {
                 keyword: null,
                 count: null
