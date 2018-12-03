@@ -25,9 +25,6 @@ export class ResultDisplayComponent implements OnInit {
 
   setChart() {
     this.chart.setOption({
-      title: {
-        text: 'Sentiment Analysis Results'
-      },
       tooltip: {},
       xAxis: {
         data: ['positive', 'negative', 'neutral']

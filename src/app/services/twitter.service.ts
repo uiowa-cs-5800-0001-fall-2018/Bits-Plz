@@ -18,5 +18,7 @@ export class TwitterService {
     });
   }
 
-
+  public sample_email(keyword: string, count: string, email: string) {
+    request.post(`https://bits-plz-backend.herokuapp.com/sample?keyword=${keyword}&count=${count}&email=${email}`);
+  }
 }

@@ -9,7 +9,7 @@ const routes: Routes = [
   { path: 'home', component: HomeComponent },
   { path: 'login', component: LoginComponent },
   { path: 'blockly', component: BlocklyComponent},
-  { path: '**', component: NotFoundComponent }
+  { path: '**', component: HomeComponent }
 ];
 
 @NgModule({
