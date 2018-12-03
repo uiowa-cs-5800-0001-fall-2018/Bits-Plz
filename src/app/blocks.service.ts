@@ -34,9 +34,7 @@ export class BlocksService {
     return `<xml xmlns="http://www.w3.org/1999/xhtml" id="toolbox" style="display: none;">
       <category name="Sentiment Analysis" colour="#5C81A6">
         <block type="display"></block>
-        <block type="report"></block>
         <block type="data_sources"></block>
-        <block type="src_twitter"></block>
       </category>
     </xml>`;
   }
@@ -60,27 +58,6 @@ export class BlocksService {
       }
     };
 
-    // Report Block definition.
-    Blockly.Blocks['report'] = {
-      init: function () {
-        this.appendDummyInput()
-          .setAlign(Blockly.ALIGN_CENTRE)
-          .appendField('REPORT');
-        this.appendValueInput('r_source')
-          .setCheck(null)
-          .appendField('source:');
-        this.setColour(230);
-        this.setTooltip('');
-        this.setHelpUrl('');
-      }
-    };
-
-    // Report Block Generator
-    Blockly.JavaScript['report'] = function (block) {
-      const value_r_source = Blockly.JavaScript.valueToCode(block, 'r_source', Blockly.JavaScript.ORDER_ATOMIC);
-      // Assemble JavaScript into code variable.
-      return 'Report-Block: ' + value_r_source;
-    };
 
     // Data Source definition.
     Blockly.Blocks['data_sources'] = {
@@ -93,22 +70,6 @@ export class BlocksService {
           .appendField(new Blockly.FieldImage('http://www.transparentpng.com/thumb/twitter/twitter-transparent-images--7.png', 15, 15,
             'Twitter'))
           .appendField(new Blockly.FieldCheckbox('TRUE'), 'include_twitter');
-        this.appendValueInput('b_twitter')
-          .setCheck(null)
-          .setAlign(Blockly.ALIGN_RIGHT)
-          .appendField(new Blockly.FieldImage('http://www.transparentpng.com/thumb/twitter/twitter-transparent-images--7.png', 15, 15,
-            'Twitter'));
-        this.appendDummyInput()
-          .setAlign(Blockly.ALIGN_RIGHT)
-          .appendField('Yelp')
-          .appendField(new Blockly.FieldImage('https://images.vexels.com/media/users/3/137424/isolated/preview/19b872cc66b8bfc0fb8d' +
-            '947e8728f183-yelp-icon-logo-by-vexels.png', 15, 15, 'Twitter'))
-          .appendField(new Blockly.FieldCheckbox('TRUE'), 'include_yelp');
-        this.appendDummyInput()
-          .setAlign(Blockly.ALIGN_RIGHT)
-          .appendField('Google Reviews')
-          .appendField(new Blockly.FieldImage('http://www.stickpng.com/assets/images/5847f9cbcef1014c0b5e48c8.png', 15, 15, 'Twitter'))
-          .appendField(new Blockly.FieldCheckbox('TRUE'), 'include_google_review');
         this.appendDummyInput()
           .setAlign(Blockly.ALIGN_RIGHT)
           .appendField('key_word: ')
@@ -131,32 +92,6 @@ export class BlocksService {
         this.setTooltip('data sources to use in sentiment analysis');
         this.setHelpUrl('');
       }
-    };
-
-    // Source Twitter Blocky Definition.
-    Blockly.Blocks['src_twitter'] = {
-      init: function () {
-        this.appendDummyInput()
-          .appendField(new Blockly.FieldImage('http://www.transparentpng.com/thumb/twitter/twitter-transparent-images--7.png', 15, 15,
-            'Twitter'))
-          .appendField('TWITTER');
-        this.appendDummyInput()
-          .appendField('search:')
-          .appendField(new Blockly.FieldTextInput('default'), 't_input');
-        this.setOutput(true, null);
-        this.setColour(206);
-        this.setTooltip('');
-        this.setHelpUrl('');
-      }
-    };
-
-    // Source Block Generator.
-    Blockly.JavaScript['src_twitter'] = function (block) {
-      const text_t_input = block.getFieldValue('t_input');
-      // TODO: Assemble JavaScript into code variable.
-      const code = 'Twitter-block: ' + text_t_input;
-      // TODO: Change ORDER_NONE to the correct strength.
-      return [code, Blockly.JavaScript.ORDER_NONE];
     };
 
     // Display Block generator.
