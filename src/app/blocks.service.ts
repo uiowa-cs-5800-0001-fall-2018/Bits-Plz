@@ -128,4 +128,18 @@ export class BlocksService {
   public static clear(): void {
     Blockly.mainWorkspace.clear();
   }
+
+  static xml_to_code(xmlText) {
+    let dom: any;
+    try {
+      dom = Blockly.Xml.textToDom(xmlText);
+    } catch (e) {
+      alert(e);
+      return;
+    }
+    // Create a headless workspace.
+    const demoWorkspace = new Blockly.Workspace();
+    Blockly.Xml.domToWorkspace(dom, demoWorkspace);
+    return Blockly.JavaScript.workspaceToCode(demoWorkspace);
+  }
 }

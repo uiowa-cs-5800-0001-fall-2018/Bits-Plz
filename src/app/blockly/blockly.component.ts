@@ -6,6 +6,7 @@ import {ResultModel} from '../services/result.model';
 import {ResultDisplayComponent} from '../result-display/result-display.component';
 import {BlocksService} from '../blocks.service';
 import swal from 'sweetalert2';
+import * as $ from 'jquery';
 
 
 @Component({
@@ -16,7 +17,7 @@ import swal from 'sweetalert2';
 export class BlocklyComponent implements OnInit {
 
   resultDisplay;
-  workspace_list: {id, name}[];
+  workspace_list: { id, name }[];
 
   constructor(
     private flashMessagesService: FlashMessagesService,
@@ -51,53 +52,38 @@ export class BlocklyComponent implements OnInit {
     const usersRef = this.firebaseService.database().ref(user_name);
     BlocksService.inject_blocks('blocklyDiv');
     usersRef.on('value', (data) => {
-        this.workspace_list = [];  // TODO add just the workspace changed (O(1) time, currently O(n))
-        const savespace = data.val();
-        const keys = Object.keys(savespace);
-        for (let i = 0; i < keys.length; i++) {
-          const k = keys[i];
-          const name = savespace[k].name;
-          this.workspace_list.push( { 'id': i, 'name': name} );
-        }
+      this.workspace_list = [];  // TODO add just the workspace changed (O(1) time, currently O(n))
+      const savespace = data.val();
+      const keys = Object.keys(savespace);
+      for (let i = 0; i < keys.length; i++) {
+        const k = keys[i];
+        const name = savespace[k].name;
+        this.workspace_list.push({'id': i, 'name': name});
+      }
     }, (err) => {
       console.log(err);
     });
   }
 
-  button_callback(workspace_name: string) {
-    const swalWithBootstrapButtons = swal.mixin({
-      confirmButtonClass: 'btn btn-success',
-      cancelButtonClass: 'btn btn-danger',
-      buttonsStyling: false,
-    });
-    swalWithBootstrapButtons({
-      title: 'What would you like to do with this workspace?',
-      showCancelButton: true,
-      confirmButtonText: 'Load',
-      showCloseButton: true,
-      cancelButtonText: 'Delete',
-      reverseButtons: false
-    }).then((result) => {
-      if (result.value) {
-        const ref = sessionStorage.getItem('user_name') + '/' + workspace_name;
-        this.firebaseService.database().ref(ref).once('value')
-          .then((dataSnapshot) => {
-            BlocksService.xml_string_to_workspace(dataSnapshot.val().workspace);
-          });
-        swalWithBootstrapButtons(
-          'Load Complete',
-          'Your workspace was successfully loaded.',
-          'success'
-        ).then(() => {});
-      } else if (result.dismiss === swal.DismissReason.cancel) { // Read more about handling dismissals
-        this.delete_workspace(workspace_name).then(() => {});
-        swalWithBootstrapButtons(
-          'Deleted',
-          'Your workspace was successfully deleted',
-          'success'
-        ).then(() => {});
-      }
-    });
+  private static swal_notice(notice: string): void {
+    swal('Success!', notice, 'success').then();
+  }
+
+  private load_workspace(name: string): void {
+    const ref = sessionStorage.getItem('user_name') + '/' + name;
+    this.firebaseService.database().ref(ref).once('value')
+      .then((dataSnapshot) => {
+        BlocksService.xml_string_to_workspace(dataSnapshot.val().workspace);
+      });
+    BlocklyComponent.swal_notice('Your workspace was loaded successfully');
+  }
+
+  private async delete_workspace(workspace_name: string) {
+    const user_name = sessionStorage.getItem('user_name');
+    const usersRef = this.firebaseService.database().ref(user_name);
+    usersRef.child(workspace_name).remove().then();
+    BlocksService.clear();
+    BlocklyComponent.swal_notice('Your work has been deleted');
   }
 
   async save_workspace() {
@@ -125,31 +111,103 @@ export class BlocklyComponent implements OnInit {
         title: 'Your work has been saved',
         showConfirmButton: false,
         timer: 1500
-      }).then(() => {});
+      }).then(() => {
+      });
     } else {
       this.flashMessagesService.show(msg_fail, {timeout: 10000});
     }
   }
 
-  async delete_workspace(workspace_name: string) {
-    const user_name = sessionStorage.getItem('user_name');
-    const usersRef = this.firebaseService.database().ref(user_name);
-    usersRef.child(workspace_name).remove().then(() => {});
-    BlocksService.clear();
+  button_callback(workspace_name: string) {
+    $(document).on('click', '.SwalBtn1', () => {
+      this.load_workspace(workspace_name);
+    });
+    $(document).on('click', '.SwalBtn2', () => {
+      this.delete_workspace(workspace_name).then();
+      swal(
+        'Success!',
+        'Workspace successfully deleted!',
+        'success'
+      ).then();
+    });
+    $(document).on('click', '.SwalBtn3', () => {
+      swal({
+        title: 'Select Notification Intervals',
+        input: 'select',
+        inputOptions: {
+          'hourly': 'Hourly',
+          'daily': 'Daily',
+          'weekly': 'Weekly',
+          'monthly': 'Monthly'
+        },
+        inputPlaceholder: 'Select an Interval',
+        showCancelButton: true,
+        inputValidator: (value) => {
+          return new Promise(async (resolve) => {
+            if (!value) {
+              resolve('You must select an interval');
+            } else {
+              const db = this.firebaseService.database();
+              const user_name = sessionStorage.getItem('user_name');
+              const user_email = sessionStorage.getItem('user_email');
+              const note_ref_str = `auto notifications/${value}/${user_name}-${workspace_name}`;
+              const workspace_ref_str = `${user_name}/${workspace_name}`;
+
+              let keyword: string;
+              let count: string;
+              const ob = {
+                keyword: null,
+                count: null
+              };
+              db.ref(workspace_ref_str).once('value').then((dataSnapshot) => {
+                console.log('quried xml', dataSnapshot.val().workspace);
+                console.log('return val', BlocksService.xml_to_code(dataSnapshot.val().workspace));
+                const code = BlocksService.xml_to_code(dataSnapshot.val().workspace)
+                  .replace('?', '').replace('\n', '').replace(';', '').split('&');
+                console.log('code', code);
+                for (const pair of code) {
+                  const splitted = pair.split('=');
+                  console.log('split', splitted[0], splitted[1]);
+                  ob[splitted[0]] = splitted[1];
+                }
+                keyword = dataSnapshot.val().keyword;
+                count = dataSnapshot.val().count;
+              }).then(() => {
+                console.log(ob.keyword, ob.count);
+                db.ref(note_ref_str).set({
+                  keyword: ob.keyword,
+                  count: ob.count,
+                  email: user_email
+                }).then();
+              });
+              swal(
+                'Success!',
+                'Your notifications were successfully setup',
+                'success'
+              ).then(function() { resolve(); });
+            }
+          });
+        }
+      }).then();
+    });
+
     swal({
-      position: 'center',
-      type: 'success',
-      title: 'Your work has been deleted',
-      showConfirmButton: false,
-      timer: 1500
-    }).then(() => {});
+      title: 'Title',
+      html:
+        '<button type="button" role="button" tabindex="0" class="SwalBtn1 customSwalBtn">' + 'Load' + '</button>' +
+        '<button type="button" role="button" tabindex="0" class="SwalBtn2 customSwalBtn">' + 'Delete' + '</button>' +
+        '<button type="button" role="button" tabindex="0" class="SwalBtn3 customSwalBtn">' + 'Set Up Notifications' + '</button>',
+      showCancelButton: false,
+      showConfirmButton: false
+    }).then();
   }
 
   @ViewChild(ResultDisplayComponent)
-  set resultDisplayComponent (resultDisplay: ResultDisplayComponent) {
+  set resultDisplayComponent(resultDisplay: ResultDisplayComponent) {
     this.resultDisplay = resultDisplay;
     console.log('successfully captured child component: ', resultDisplay);
   }
+
   run_query(): void {
     this.twitterService.get_tweets(BlocksService.show_code()).subscribe({
       next: x => {

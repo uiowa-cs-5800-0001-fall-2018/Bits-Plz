@@ -29,6 +29,7 @@
     "echarts": "^4.2.0-rc.2",
     "firebase": "^5.5.3",
     "firebaseui": "^3.4.1",
+    "jquery": "^3.3.1",
     "materialize-css": "^1.0.0-rc.2",
     "ngx-flash-messages": "^1.0.4",
     "parse-json": "^4.0.0",
