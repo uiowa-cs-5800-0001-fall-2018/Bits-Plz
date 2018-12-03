@@ -19,6 +19,7 @@ export class BlocklyComponent implements OnInit {
 
   resultDisplay;
   workspace_list: { id, name }[];
+  INVALID_NAME: 'Name entered was invalid';
   MSG_SUCCESS = 'Your work has been saved';
   NEED_LOGIN = 'you need to login first';
   SUBSCRIBE_OPTIONS = {
@@ -55,6 +56,7 @@ export class BlocklyComponent implements OnInit {
   }
 
   private unsubscribe(name: string) {
+    let unsubscribed: boolean;
     this.get_all_subscriptions(name).subscribe({
       next: intervals => {
         const input_options = {};
@@ -68,14 +70,22 @@ export class BlocklyComponent implements OnInit {
           inputPlaceholder: 'Select an interval to unsubscribe',
           showCancelButton: true,
           inputValidator: value => {
+            unsubscribed = value === 'Select an interval to unsubscribe';
             return new Promise((resolve) => {
               this.firebaseService.database().
                 ref(`auto notifications/${value}/${sessionStorage.getItem('user_name')}-${name}`)
                 .remove().then();
               resolve();
+
             });
           }
-        }).then(() => { BlocklyComponent.swal_notice('Successfully Unsubscribed'); });
+        }).then(() => {
+          if ('unsubscribed') {
+            BlocklyComponent.swal_error('No unsubscription was made');
+          } else {
+            BlocklyComponent.swal_notice('Successfully Unsubscribed');
+          }
+        });
       },
       error: err => { console.log(err); },
       complete: () => {}
@@ -104,6 +114,10 @@ export class BlocklyComponent implements OnInit {
 
   private static swal_notice(notice: string): Promise<any> {
     return swal('Success!', notice, 'success');
+  }
+
+  private static swal_error(notice: string): Promise<any> {
+    return swal('Failed!', notice, 'error');
   }
 
   ngOnInit() {
@@ -142,27 +156,29 @@ export class BlocklyComponent implements OnInit {
   }
 
   async save_workspace() {
-
-    // get name of the workspace
-    const {value: workspace} = await swal({
-      title: 'What name would you like to save this workspace as?',
-      input: 'text',
-      showCancelButton: true,
-      inputValidator: (value) => {
-        return !value && 'You need to write something!';
-      }
-    });
-
     const user_name = sessionStorage.getItem('user_name');
-    const usersRef = this.firebaseService.database().ref(user_name + '/' + workspace);
-    if (user_name && workspace != null) {
-      usersRef.set({
-        name: workspace,
-        workspace: BlocksService.workspace_to_xml_string()
-      }).then();
-      BlocklyComponent.swal_notice(this.MSG_SUCCESS).then();
+    if (user_name) {
+      // get name of the workspace
+      const {value: workspace} = await swal({
+        title: 'What name would you like to save this workspace as?',
+        input: 'text',
+        showCancelButton: true,
+        inputValidator: (value) => {
+          return !value && 'You need to write something!';
+        }
+      });
+      if (workspace) {
+        const usersRef = this.firebaseService.database().ref(user_name + '/' + workspace);
+        usersRef.set({
+          name: workspace,
+          workspace: BlocksService.workspace_to_xml_string()
+        }).then();
+        BlocklyComponent.swal_notice(this.MSG_SUCCESS).then();
+      } else {
+        BlocklyComponent.swal_notice(this.INVALID_NAME).then();
+      }
     } else {
-      BlocklyComponent.swal_notice(this.NEED_LOGIN).then();
+      BlocklyComponent.swal_error(this.NEED_LOGIN).then();
     }
   }
 
