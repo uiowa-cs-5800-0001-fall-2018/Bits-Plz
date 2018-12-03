@@ -13,7 +13,6 @@ export class BlocksService {
   public static getGraph(block): string {
     const dropdown_graph_type = block.getFieldValue('graph_type');
 
-    // let dropdown_graph_content = block.getFieldValue('graph_content');
     return dropdown_graph_type;
   }
 
@@ -46,11 +45,6 @@ export class BlocksService {
   public static show_code(): string {
     return 'https://bits-plz-backend.herokuapp.com/search' + Blockly.JavaScript.workspaceToCode(Blockly.mainWorkspace);
   }
-
-  /*
-  public static graphType(): string {
-    return 'pie';
-  }*/
 
   public static clear(): void {
     Blockly.mainWorkspace.clear();
