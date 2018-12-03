@@ -8,7 +8,6 @@ import {BlocksService} from '../blocks.service';
 import swal from 'sweetalert2';
 import * as $ from 'jquery';
 import {Observable} from 'rxjs/Observable';
-import {forEach} from '@angular/router/src/utils/collection';
 
 
 @Component({
@@ -21,7 +20,6 @@ export class BlocklyComponent implements OnInit {
   resultDisplay;
   workspace_list: {id, name}[];
   tweet_list: {content, score}[];
-  INVALID_NAME: 'Name entered was invalid';
   MSG_SUCCESS = 'Your work has been saved';
   NEED_LOGIN = 'you need to login first';
   SUBSCRIBE_OPTIONS = {
@@ -153,6 +151,16 @@ export class BlocklyComponent implements OnInit {
     const usersRef = this.firebaseService.database().ref(user_name);
     usersRef.child(workspace_name).remove().then();
     BlocksService.clear();
+
+    // delete all associated notifications in the database
+    this.get_all_subscriptions(workspace_name).subscribe({
+      next: intervals => {
+        for (let i = 0; i < intervals.length; i++) {
+          this.firebaseService.database().ref(`auto notifications/${intervals[i]}/${user_name}-${workspace_name}`).remove().then();
+        }
+      }
+    });
+
     BlocklyComponent.swal_notice('Your workspace has been deleted').then();
   }
 
@@ -168,12 +176,13 @@ export class BlocklyComponent implements OnInit {
           return !value && 'You need to write something!';
         }
       }).then();
+      if (workspace) {
         const usersRef = this.firebaseService.database().ref(user_name + '/' + workspace);
         usersRef.set({
           name: workspace,
           workspace: BlocksService.workspace_to_xml_string()
         }).then(() => BlocklyComponent.swal_notice(this.MSG_SUCCESS));
-
+      }
     } else {
       BlocklyComponent.swal_error(this.NEED_LOGIN).then();
     }
