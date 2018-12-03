@@ -35,6 +35,8 @@
     "request-promise-native": "^1.0.5",
     "requirejs": "^2.3.6",
     "rxjs": "^5.5.6",
+    "sweetalert": "^2.1.2",
+    "sweetalert2": "^7.29.1",
     "tc-angular-chartjs": "^2.1.4",
     "typescript": "~2.5.3",
     "zone.js": "^0.8.19"

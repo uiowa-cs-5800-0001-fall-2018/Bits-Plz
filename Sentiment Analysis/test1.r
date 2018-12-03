@@ -1,7 +1,8 @@
 #this is a practice for training and testing data in order to do sentiment analysis
 #we are splitting up the data in the dataset and trying to do predicitive analysis here
 #we will perform regression techniques such as logistic regression for predictive analysis,
-
+#this code is written in R
+#this code is written in R
 income <-
   read.table("http://www.stat.uiowa.edu/~kcowles/Datasets/income.dat",
              header = TRUE)
