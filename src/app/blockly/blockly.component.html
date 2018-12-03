@@ -2,7 +2,7 @@
 <button (click)="save_workspace().then()">Save My Workspace!</button>
 <button (click)="run_query()">Run Query!</button>
 <p>saved workspaces:</p>
-<span *ngFor="let btn of workspace_list" (click)="button_callback_test(btn.name)">
+<span *ngFor="let btn of workspace_list" (click)="button_callback(btn.name)">
   <button>{{ btn.name }}</button>
 </span>
 <p>auto notifications</p>

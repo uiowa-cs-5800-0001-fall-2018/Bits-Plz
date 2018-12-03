@@ -65,7 +65,7 @@ export class BlocklyComponent implements OnInit {
     });
   }
 
-  button_callback_test(workspace_name: string) {
+  button_callback(workspace_name: string) {
     $(document).on('click', '.SwalBtn1', () => {
       const ref = sessionStorage.getItem('user_name') + '/' + workspace_name;
       this.firebaseService.database().ref(ref).once('value')
@@ -156,43 +156,6 @@ export class BlocklyComponent implements OnInit {
       showCancelButton: false,
       showConfirmButton: false
     }).then();
-  }
-
-  button_callback(workspace_name: string) {
-    const swalWithBootstrapButtons = swal.mixin({
-      confirmButtonClass: 'btn btn-success',
-      cancelButtonClass: 'btn btn-danger',
-      buttonsStyling: false,
-    });
-    swalWithBootstrapButtons({
-      title: 'What would you like to do with this workspace?',
-      showCancelButton: true,
-      confirmButtonText: 'Load',
-      showCloseButton: true,
-      cancelButtonText: 'Delete',
-      reverseButtons: false
-    }).then((result) => {
-      if (result.value) {
-        const ref = sessionStorage.getItem('user_name') + '/' + workspace_name;
-        this.firebaseService.database().ref(ref).once('value')
-          .then((dataSnapshot) => {
-            BlocksService.xml_string_to_workspace(dataSnapshot.val().workspace);
-          });
-        swalWithBootstrapButtons(
-          'Load Complete',
-          'Your workspace was successfully loaded.',
-          'success'
-        ).then();
-      } else if (result.dismiss === swal.DismissReason.cancel) { // Read more about handling dismissals
-        this.delete_workspace(workspace_name).then(() => {
-        });
-        swalWithBootstrapButtons(
-          'Deleted',
-          'Your workspace was successfully deleted',
-          'success'
-        ).then();
-      }
-    });
   }
 
   async save_workspace() {
