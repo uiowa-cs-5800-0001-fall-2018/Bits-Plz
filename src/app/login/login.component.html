@@ -1,7 +1,7 @@
 <!-- The surrounding HTML is left untouched by FirebaseUI.
      Your app may use that space for branding, controls and other customizations.-->
 
-<h1>Login Component is working</h1>
+
 <div *ngIf="user_name; then logged_in else not_logged_in">
   <!-- template will replace this div -->
 </div>
@@ -9,7 +9,7 @@
 
 <!-- User NOT logged in -->
 <ng-template #not_logged_in>
-  <p>You are not logged in</p>
+  <p align ="center">You are not logged in.</p>
   <div id="firebaseui-auth-container"></div>
 </ng-template>
 
@@ -22,3 +22,6 @@
     <button (click)="logout()">Logout</button>
   </pre>
 </ng-template>
+
+
+
