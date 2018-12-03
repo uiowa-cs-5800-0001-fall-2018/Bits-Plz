@@ -18,7 +18,7 @@ export class BlocklyComponent implements OnInit {
 
   resultDisplay;
   workspace_list: {id, name}[];
-  tweet_list: {content}[];
+  tweet_list: {content, score}[];
 
   constructor(
     private flashMessagesService: FlashMessagesService,
@@ -164,8 +164,19 @@ export class BlocklyComponent implements OnInit {
         this.tweet_list = [];
         for (let i = 0; i < x.length; i++) {
           console.log(x[i].content);
-          this.tweet_list.push( { 'content': x[i].content} );
+          this.tweet_list.push( { 'content': x[i].content, 'score': x[i].score} );
         }
+
+        function keysrt(key) {
+          return function(a, b) {
+            if (a[key] > b[key]) return 1;
+            if (a[key] < b[key]) return -1;
+            return 0;
+          }
+        }
+
+        this.tweet_list.sort(keysrt('score'));
+
       },
       error: err => console.log('cannot update, ', err),
       complete: () => console.log('query completed')
