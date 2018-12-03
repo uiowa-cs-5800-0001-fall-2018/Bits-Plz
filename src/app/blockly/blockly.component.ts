@@ -246,9 +246,9 @@ export class BlocklyComponent implements OnInit {
     swal({
       title: 'What would you like to do with this workspace?',
       html:
-        '<a style = "margin: 10px" id="SwalBtn1" type="button" role="button" tabindex="0" class="waves-effect waves-light btn">' + 'Load' + '</a>' +
-        '<a style = "margin: 10px" id="SwalBtn2" type="button" role="button" tabindex="0" class="waves-effect waves-light btn">' + 'Delete' + '</a>' +
-        '<a style = "margin: 10px" id="SwalBtn3" type="button" role="button" tabindex="0" class="waves-effect waves-light btn">' + 'Set Up Notifications' + '</a>',
+        '<a style="margin: 10px; background-color: lightgray" id="SwalBtn1" class="w3-button">Load</a>' +
+        '<a style="margin: 10px; background-color: lightgray" id="SwalBtn2" class="w3-button">Delete</a>' +
+        '<a style="margin: 10px; background-color: lightgray" id="SwalBtn3" class="w3-button">Set Up Notifications</a>',
       showCancelButton: false,
       showConfirmButton: false
     }).then();
