@@ -1,4 +1,5 @@
 import { Component, OnInit } from '@angular/core';
+import {BlocksService} from '../blocks.service';
 import * as echarts from 'echarts';
 
 @Component({
@@ -7,13 +8,39 @@ import * as echarts from 'echarts';
   styleUrls: ['./result-display.component.css']
 })
 export class ResultDisplayComponent implements OnInit {
-
+   static _gtype = 'bar';
   chart;
 
-  constructor() { }
+  constructor() {
+    // this.update_type('pie');
+  }
+
+  static setGType(input: string) {
+    this._gtype = input;
+    alert('GType is: ' + this._gtype);
+  }
 
   ngOnInit() {
     this.chart = echarts.init(document.getElementById('main'));
+    this.setChart();
+    /*this.chart.setOption({
+      title: {
+        text: 'Sentiment Analysis Results'
+      },
+      tooltip: {},
+      xAxis: {
+        data: ['positive', 'negative', 'neutral']
+      },
+      yAxis: {},
+      series: [{
+        name: 'number of tweets',
+        type: ResultDisplayComponent._gtype,
+        data: []
+      }]
+    });*/
+  }
+
+  setChart() {
     this.chart.setOption({
       title: {
         text: 'Sentiment Analysis Results'
@@ -25,7 +52,7 @@ export class ResultDisplayComponent implements OnInit {
       yAxis: {},
       series: [{
         name: 'number of tweets',
-        type: 'bar',
+        type: ResultDisplayComponent._gtype,
         data: []
       }]
     });
@@ -36,4 +63,11 @@ export class ResultDisplayComponent implements OnInit {
       series: [{ data: [positive, negative, neutral] }]
     });
   }
+
+  public update_type() {
+    this.chart.setOption({
+     // series: [{ type: ResultDisplayComponent._gtype }]
+    });
+  }
+
 }

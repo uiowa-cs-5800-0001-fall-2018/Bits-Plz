@@ -1,11 +1,29 @@
-import { Injectable } from '@angular/core';
+import {Injectable} from '@angular/core';
+import {ResultDisplayComponent} from './result-display/result-display.component';
+
+
 declare var Blockly: any;
 
 @Injectable()
 export class BlocksService {
+  public static get graphType(): string {
+    return this._graphType;
+  }
+  
+  public static getGraph(block): string {
+    const dropdown_graph_type = block.getFieldValue('graph_type');
 
+    // let dropdown_graph_content = block.getFieldValue('graph_content');
+    return dropdown_graph_type;
+  }
+
+  public static set graphType(value: string) {
+    this._graphType = this.getGraph(Blockly.Blocks['display']);
+  }
   constructor() {
   }
+
+  static _graphType: string;
 
   public static inject_blocks(div_name: string) {
     BlocksService.gen_blocks();
@@ -29,6 +47,29 @@ export class BlocksService {
     return 'https://bits-plz-backend.herokuapp.com/search' + Blockly.JavaScript.workspaceToCode(Blockly.mainWorkspace);
   }
 
+  /*
+  public static graphType(): string {
+    return 'pie';
+  }*/
+
+  public static clear(): void {
+    Blockly.mainWorkspace.clear();
+  }
+
+  static xml_to_code(xmlText) {
+    let dom: any;
+    try {
+      dom = Blockly.Xml.textToDom(xmlText);
+    } catch (e) {
+      alert(e);
+      return;
+    }
+    // Create a headless workspace.
+    const demoWorkspace = new Blockly.Workspace();
+    Blockly.Xml.domToWorkspace(dom, demoWorkspace);
+    return Blockly.JavaScript.workspaceToCode(demoWorkspace);
+  }
+
   // This is the toolbox
   private static gen_tool_box(): string {
     return `<xml xmlns="http://www.w3.org/1999/xhtml" id="toolbox" style="display: none;">
@@ -41,7 +82,7 @@ export class BlocksService {
 
   private static gen_blocks(): void {
     Blockly.Blocks['display'] = {
-      init: function() {
+      init: function () {
         this.appendDummyInput()
           .setAlign(Blockly.ALIGN_CENTRE)
           .appendField('DISPLAY');
@@ -61,7 +102,7 @@ export class BlocksService {
 
     // Data Source definition.
     Blockly.Blocks['data_sources'] = {
-      init: function() {
+      init: function () {
         this.appendDummyInput()
           .appendField('data sources');
         this.appendDummyInput()
@@ -98,14 +139,13 @@ export class BlocksService {
     };
 
     // Display Block generator.
-    Blockly.JavaScript['display'] = function(block) {
+    Blockly.JavaScript['display'] = function (block) {
       let dropdown_graph_type = block.getFieldValue('graph_type');
-      let dropdown_graph_content = block.getFieldValue('graph_content');
-      // Assemble JavaScript into code variable.
-      let code = '...';
-      // Change ORDER_NONE to the correct strength.
-      return [code, Blockly.JavaScript.ORDER_NONE];
+      ResultDisplayComponent.setGType(dropdown_graph_type);
+      // let dropdown_graph_content = block.getFieldValue('graph_content');
+      return [dropdown_graph_type, Blockly.JavaScript.ORDER_NONE];
     };
+    
 
     // Data Source Block generator.
     Blockly.JavaScript['data_sources'] = function (block) {
@@ -128,23 +168,5 @@ export class BlocksService {
 
   private static gen_generators(): void {
 
-  }
-
-  public static clear(): void {
-    Blockly.mainWorkspace.clear();
-  }
-
-  static xml_to_code(xmlText) {
-    let dom: any;
-    try {
-      dom = Blockly.Xml.textToDom(xmlText);
-    } catch (e) {
-      alert(e);
-      return;
-    }
-    // Create a headless workspace.
-    const demoWorkspace = new Blockly.Workspace();
-    Blockly.Xml.domToWorkspace(dom, demoWorkspace);
-    return Blockly.JavaScript.workspaceToCode(demoWorkspace);
   }
 }

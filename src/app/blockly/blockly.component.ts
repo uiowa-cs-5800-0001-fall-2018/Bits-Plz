@@ -194,10 +194,20 @@ export class BlocklyComponent implements OnInit {
     this.resultDisplay = resultDisplay;
   }
 
+  updateGraph() {
+    this.resultDisplay.setChart();
+  }
+
+  show_code(): void {
+    // Generate JavaScript code and display it.
+    alert(BlocksService.show_code());
+  }
+
   run_query(): void {
     this.twitterService.get_tweets(BlocksService.show_code()).subscribe({
       next: x => {
         const distribution = BlocklyComponent.calc_distribution(x);
+        this.updateGraph();
         this.resultDisplay.update_contents(
           distribution.positive,
           distribution.negative,
