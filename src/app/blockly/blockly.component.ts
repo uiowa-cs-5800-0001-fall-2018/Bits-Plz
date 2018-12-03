@@ -20,7 +20,6 @@ export class BlocklyComponent implements OnInit {
   resultDisplay;
   workspace_list: {id, name}[];
   tweet_list: {content, score}[];
-  INVALID_NAME: 'Name entered was invalid';
   MSG_SUCCESS = 'Your work has been saved';
   NEED_LOGIN = 'you need to login first';
   SUBSCRIBE_OPTIONS = {
@@ -177,12 +176,13 @@ export class BlocklyComponent implements OnInit {
           return !value && 'You need to write something!';
         }
       }).then();
+      if (workspace) {
         const usersRef = this.firebaseService.database().ref(user_name + '/' + workspace);
         usersRef.set({
           name: workspace,
           workspace: BlocksService.workspace_to_xml_string()
         }).then(() => BlocklyComponent.swal_notice(this.MSG_SUCCESS));
-
+      }
     } else {
       BlocklyComponent.swal_error(this.NEED_LOGIN).then();
     }
