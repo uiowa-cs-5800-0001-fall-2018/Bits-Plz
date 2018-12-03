@@ -45,17 +45,6 @@ export class BlocksService {
           .appendField(new Blockly.FieldCheckbox('TRUE'), 'include_twitter');
         this.appendDummyInput()
           .setAlign(Blockly.ALIGN_RIGHT)
-          .appendField('Yelp')
-          .appendField(new Blockly.FieldImage('https://images.vexels.com/media/users/3/137424/isolated/preview/19b872cc66b8bfc0fb8d' +
-            '947e8728f183-yelp-icon-logo-by-vexels.png', 15, 15, 'Twitter'))
-          .appendField(new Blockly.FieldCheckbox('TRUE'), 'include_yelp');
-        this.appendDummyInput()
-          .setAlign(Blockly.ALIGN_RIGHT)
-          .appendField('Google Reviews')
-          .appendField(new Blockly.FieldImage('http://www.stickpng.com/assets/images/5847f9cbcef1014c0b5e48c8.png', 15, 15, 'Twitter'))
-          .appendField(new Blockly.FieldCheckbox('TRUE'), 'include_google_review');
-        this.appendDummyInput()
-          .setAlign(Blockly.ALIGN_RIGHT)
           .appendField('key_word: ')
           .appendField(new Blockly.FieldTextInput('default'), 'key_word');
         this.appendDummyInput()
@@ -96,8 +85,6 @@ export class BlocksService {
   private static gen_generators(): void {
     Blockly.JavaScript['data_sources'] = function(block) {
       var checkbox_include_twitter = block.getFieldValue('include_twitter') == 'TRUE';
-      var checkbox_include_yelp = block.getFieldValue('include_yelp') == 'TRUE';
-      var checkbox_include_google_review = block.getFieldValue('include_google_review') == 'TRUE';
       var text_key_word = block.getFieldValue('key_word');
       var number_num_entries = block.getFieldValue('num_entries');
       var number_radius = block.getFieldValue('radius');
