@@ -180,13 +180,13 @@ export class BlocklyComponent implements OnInit {
   }
 
   button_callback(workspace_name: string) {
-    $(document).on('click', '.SwalBtn1', () => {
+    $(document).on('click', '#SwalBtn1', () => {
       this.load_workspace(workspace_name);
     });
-    $(document).on('click', '.SwalBtn2', () => {
+    $(document).on('click', '#SwalBtn2', () => {
       this.delete_workspace(workspace_name).then();
     });
-    $(document).on('click', '.SwalBtn3', () => {
+    $(document).on('click', '#SwalBtn3', () => {
       swal({
         title: 'Select Notification Intervals',
         input: 'select',
@@ -235,11 +235,11 @@ export class BlocklyComponent implements OnInit {
     });
 
     swal({
-      title: 'Title',
+      title: 'What would you like to do with this workspace?',
       html:
-        '<button type="button" role="button" tabindex="0" class="SwalBtn1 customSwalBtn">' + 'Load' + '</button>' +
-        '<button type="button" role="button" tabindex="0" class="SwalBtn2 customSwalBtn">' + 'Delete' + '</button>' +
-        '<button type="button" role="button" tabindex="0" class="SwalBtn3 customSwalBtn">' + 'Set Up Notifications' + '</button>',
+        '<a style = "margin: 10px" id="SwalBtn1" type="button" role="button" tabindex="0" class="waves-effect waves-light btn">' + 'Load' + '</a>' +
+        '<a style = "margin: 10px" id="SwalBtn2" type="button" role="button" tabindex="0" class="waves-effect waves-light btn">' + 'Delete' + '</a>' +
+        '<a style = "margin: 10px" id="SwalBtn3" type="button" role="button" tabindex="0" class="waves-effect waves-light btn">' + 'Set Up Notifications' + '</a>',
       showCancelButton: false,
       showConfirmButton: false
     }).then();
