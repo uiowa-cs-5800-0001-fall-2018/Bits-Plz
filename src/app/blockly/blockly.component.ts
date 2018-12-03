@@ -18,6 +18,8 @@ export class BlocklyComponent implements OnInit {
 
   resultDisplay;
   workspace_list: { id, name }[];
+  MSG_SUCCESS = 'Your work has been saved';
+  NEED_LOGIN = 'you need to login first';
 
   constructor(
     private flashMessagesService: FlashMessagesService,
@@ -47,6 +49,10 @@ export class BlocklyComponent implements OnInit {
     };
   }
 
+  private static swal_notice(notice: string): void {
+    swal('Success!', notice, 'success').then();
+  }
+
   ngOnInit() {
     const user_name = sessionStorage.getItem('user_name');
     const usersRef = this.firebaseService.database().ref(user_name);
@@ -63,10 +69,6 @@ export class BlocklyComponent implements OnInit {
     }, (err) => {
       console.log(err);
     });
-  }
-
-  private static swal_notice(notice: string): void {
-    swal('Success!', notice, 'success').then();
   }
 
   private load_workspace(name: string): void {
@@ -87,6 +89,8 @@ export class BlocklyComponent implements OnInit {
   }
 
   async save_workspace() {
+
+    // get name of the workspace
     const {value: workspace} = await swal({
       title: 'What name would you like to save this workspace as?',
       input: 'text',
@@ -96,25 +100,16 @@ export class BlocklyComponent implements OnInit {
       }
     });
 
-    const msg_success = 'Successfully saved';
-    const msg_fail = 'you need to login first';
     const user_name = sessionStorage.getItem('user_name');
     const usersRef = this.firebaseService.database().ref(user_name + '/' + workspace);
     if (user_name && workspace != null) {
       usersRef.set({
         name: workspace,
         workspace: BlocksService.workspace_to_xml_string()
-      }).then(() => this.flashMessagesService.show(msg_success, {timeout: 10000}));
-      swal({
-        position: 'center',
-        type: 'success',
-        title: 'Your work has been saved',
-        showConfirmButton: false,
-        timer: 1500
-      }).then(() => {
-      });
+      }).then();
+      BlocklyComponent.swal_notice(this.MSG_SUCCESS);
     } else {
-      this.flashMessagesService.show(msg_fail, {timeout: 10000});
+      BlocklyComponent.swal_notice(this.NEED_LOGIN);
     }
   }
 
