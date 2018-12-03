@@ -1,12 +1,43 @@
+<!DOCTYPE html>
+<html>
+<link rel="stylesheet" href="https://www.w3schools.com/w3css/4/w3.css">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Raleway">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+
 <div id="blocklyDiv" style="height: 50vh; width: 50%;" xmlns=""></div>
-<button (click)="save_workspace().then()">Save My Workspace!</button>
-<button (click)="run_query()">Run Query!</button>
+<style scoped>
+
+  .button-success,
+  .button-error,
+  .button-warning,
+  .button-secondary {
+    color: white;
+    border-radius: 4px;
+    text-shadow: 0 1px 1px rgba(0, 0, 0, 0.2);
+  }
+
+  .button-success {
+    background: rgb(28, 184, 65); /* this is a green */
+  }
+
+  .button-error {
+    background: rgb(202, 60, 60); /* this is a maroon */
+  }
+
+  .button-warning {
+    background: rgb(223, 117, 20); /* this is an orange */
+  }
+
+  .button-secondary {
+    background: rgb(66, 184, 221); /* this is a light blue */
+  }
+  </style>
+<button class = "button-secondary pure-button" (click)="save_workspace().then()">Save My Workspace!</button>
+<button class = "button-success pure-button"(click)="run_query()">Run Query!</button>
 <p>saved workspaces:</p>
 <span *ngFor="let btn of workspace_list" (click)="button_callback(btn.name)">
-  <button>{{ btn.name }}</button>
+  <button class = "button-secondary pure-button">{{ btn.name }}</button>
 </span>
 <p>auto notifications</p>
 <app-result-display></app-result-display>
-
-
-
+</html>
