@@ -5,9 +5,14 @@
 <title>BITS PLZ </title>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
+<head>
+  <script src="https://cdn.firebase.com/libs/firebaseui/3.1.1/firebaseui.js"></script>
+  <link type="text/css" rel="stylesheet" href="https://cdn.firebase.com/libs/firebaseui/3.1.1/firebaseui.css" />
+</head>
 <link rel="stylesheet" href="https://www.w3schools.com/w3css/4/w3.css">
 <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Raleway">
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+
 <style>
   body,h1,h2,h3,h4,h5,h6 {font-family: "Raleway", sans-serif}
   body, html {
@@ -65,7 +70,6 @@
 
 <!-- User NOT logged in -->
 <ng-template #not_logged_in>
-  <p>Sign in Below</p>
   <div id="firebaseui-auth-container"></div>
 </ng-template>
 
@@ -78,4 +82,7 @@
     User Email: {{user_email}}.
     <button (click)="logout()">Logout</button>
   </pre>
+  <div class="imgcontainer">
+    <img src="http://i63.tinypic.com/66bt3q.jpg" alt="Avatar" class="avatar">
+  </div>
 </ng-template>

@@ -2,6 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import {FirebaseService} from '../services/firebase.service';
 import swal from 'sweetalert2';
 
+
 @Component({
   selector: 'app-login',
   templateUrl: './login.component.html',
@@ -20,16 +21,15 @@ export class LoginComponent implements OnInit {
     this.start_ui();
   }
 
-
   start_ui(): void {
-    if (this.user_name === null) {
-      this.firebase_service.get_login_ui().start(
-        '#firebaseui-auth-container',
-        this.firebase_service.get_config()
-      );
-
+      if (this.user_name === null) {
+        this.firebase_service.get_login_ui().start(
+          '#firebaseui-auth-container',
+          this.firebase_service.get_config()
+        );
+      }
     }
-  }
+
 
   constructor(firebase_service: FirebaseService) {
     this.firebase_service = firebase_service;
@@ -44,5 +44,6 @@ export class LoginComponent implements OnInit {
     swal(
       'Logout Successful'
     );
+    document.location.reload();
   }
 }

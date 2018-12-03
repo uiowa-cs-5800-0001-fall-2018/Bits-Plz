@@ -1,0 +1,9 @@
+.imgcontainer{
+  text-align: center;
+  margin: 24px 0 12px 0;
+}
+img.avatar{
+  max-width: 100%;
+  height: auto;
+  max-height: 100%;
+}
