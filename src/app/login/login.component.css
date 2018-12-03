@@ -1,4 +1,4 @@
-div{
+div {
   background-color: #ffffff;
   width: 500px;
   margin: 50px auto 10px auto;
@@ -8,3 +8,14 @@ div{
   box-shadow: 0 2px 10px -3px #333;
   text-align: center;
 }
+
+pre { font-family: sans-serif;
+  background-color: #ffffff;
+  width: 500px;
+  margin: 50px auto 10px auto;
+  padding: 30px;
+  border-radius: 8px;
+  overflow: hidden;
+  box-shadow: 0 2px 10px -3px #333;
+  text-align: center;}
+
