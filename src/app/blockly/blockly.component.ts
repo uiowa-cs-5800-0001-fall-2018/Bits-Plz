@@ -148,8 +148,6 @@ export class BlocklyComponent implements OnInit {
               const note_ref_str = `auto notifications/${value}/${user_name}-${workspace_name}`;
               const workspace_ref_str = `${user_name}/${workspace_name}`;
 
-              let keyword: string;
-              let count: string;
               const ob = {
                 keyword: null,
                 count: null
@@ -161,8 +159,6 @@ export class BlocklyComponent implements OnInit {
                   const splitted = pair.split('=');
                   ob[splitted[0]] = splitted[1];
                 }
-                keyword = dataSnapshot.val().keyword;
-                count = dataSnapshot.val().count;
               }).then(() => {
                 console.log(ob.keyword, ob.count);
                 db.ref(note_ref_str).set({
