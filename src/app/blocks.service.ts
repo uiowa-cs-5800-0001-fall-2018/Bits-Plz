@@ -49,12 +49,12 @@ export class BlocksService {
           .appendField('display as:')
           .appendField(new Blockly.FieldDropdown([['bar graph', 'bar'], ['pie chart', 'pie']]), 'graph_type');
         this.appendDummyInput()
-          .appendField("group by:")
+          .appendField('group by:')
           .appendField(new Blockly.FieldDropdown([['positive/negative', 'pos_neg']]), 'graph_content');
         this.setOutput(true, null);
         this.setColour(210);
-        this.setTooltip("");
-        this.setHelpUrl("");
+        this.setTooltip('');
+        this.setHelpUrl('');
       }
     };
 
@@ -78,6 +78,10 @@ export class BlocksService {
           .setAlign(Blockly.ALIGN_RIGHT)
           .appendField('#entries from each source: ')
           .appendField(new Blockly.FieldNumber(0, 0, 100, 1), 'num_entries');
+        this.appendValueInput('display')
+          .setCheck(null)
+          .setAlign(Blockly.ALIGN_RIGHT)
+          .appendField('display:');
         this.appendDummyInput()
           .setAlign(Blockly.ALIGN_RIGHT)
           .appendField('within')
@@ -87,7 +91,6 @@ export class BlocksService {
           .appendField(', lon')
           .appendField(new Blockly.FieldNumber(0, -180, 180), 'lon');
         this.setInputsInline(false);
-        this.setOutput(true, null);
         this.setColour(230);
         this.setTooltip('data sources to use in sentiment analysis');
         this.setHelpUrl('');
@@ -109,6 +112,7 @@ export class BlocksService {
       // const checkbox_include_twitter = block.getFieldValue('include_twitter') == 'TRUE';
       // const checkbox_include_yelp = block.getFieldValue('include_yelp') == 'TRUE';
       // const checkbox_include_google_review = block.getFieldValue('include_google_review') == 'TRUE';
+      let value_display = Blockly.JavaScript.valueToCode(block, 'display', Blockly.JavaScript.ORDER_ATOMIC);
       const text_key_word = block.getFieldValue('key_word');
       const num_entries = block.getFieldValue('num_entries');
       // const number_radius = block.getFieldValue('radius');
