@@ -68,12 +68,14 @@ export class BlocklyComponent implements OnInit {
     const swalWithBootstrapButtons = swal.mixin({
       confirmButtonClass: 'btn btn-success',
       cancelButtonClass: 'btn btn-danger',
-      buttonsStyling: false,
+      buttonsStyling: true,
     });
     swalWithBootstrapButtons({
       title: 'What would you like to do with this workspace?',
       showCancelButton: true,
+      cancelButtonClass: 'btn btn-danger',
       confirmButtonText: 'Load',
+      confirmButtonClass: 'btn btn-success',
       showCloseButton: true,
       cancelButtonText: 'Delete',
       reverseButtons: false
@@ -105,6 +107,7 @@ export class BlocklyComponent implements OnInit {
       title: 'What name would you like to save this workspace as?',
       input: 'text',
       showCancelButton: true,
+      cancelButtonClass: 'btn btn-danger',
       inputValidator: (value) => {
         return !value && 'You need to write something!';
       }
