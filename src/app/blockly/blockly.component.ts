@@ -155,14 +155,10 @@ export class BlocklyComponent implements OnInit {
                 count: null
               };
               db.ref(workspace_ref_str).once('value').then((dataSnapshot) => {
-                console.log('quried xml', dataSnapshot.val().workspace);
-                console.log('return val', BlocksService.xml_to_code(dataSnapshot.val().workspace));
                 const code = BlocksService.xml_to_code(dataSnapshot.val().workspace)
                   .replace('?', '').replace('\n', '').replace(';', '').split('&');
-                console.log('code', code);
                 for (const pair of code) {
                   const splitted = pair.split('=');
-                  console.log('split', splitted[0], splitted[1]);
                   ob[splitted[0]] = splitted[1];
                 }
                 keyword = dataSnapshot.val().keyword;
@@ -200,7 +196,6 @@ export class BlocklyComponent implements OnInit {
   @ViewChild(ResultDisplayComponent)
   set resultDisplayComponent(resultDisplay: ResultDisplayComponent) {
     this.resultDisplay = resultDisplay;
-    console.log('successfully captured child component: ', resultDisplay);
   }
 
   run_query(): void {
