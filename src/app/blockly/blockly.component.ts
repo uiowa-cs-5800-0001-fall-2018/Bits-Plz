@@ -63,53 +63,88 @@ export class BlocklyComponent implements OnInit {
     }, (err) => {
       console.log(err);
     });
-
-    //   $(document).ready(function() {
-    //     $(document).on('click', '.SwalBtn1', function() {
-    //       // Some code 1
-    //       console.log('Button 1');
-    //       swal.clickConfirm();
-    //     });
-    //     $(document).on('click', '.SwalBtn2', function() {
-    //       // Some code 2
-    //       console.log('Button 2');
-    //       swal.clickConfirm();
-    //     });
-    //     $(document).on('click', '.SwalBtn3', function() {
-    //       // Some code 2
-    //       console.log('Button 3');
-    //       swal.clickConfirm();
-    //     });
-    //
-    //     $('#ShowBtn').click(function() {
-    //       swal({
-    //         title: 'Title',
-    //         html:
-    //           '<button type="button" role="button" tabindex="0" class="SwalBtn1 customSwalBtn">' + 'Button1' + '</button>' +
-    //           '<button type="button" role="button" tabindex="0" class="SwalBtn2 customSwalBtn">' + 'Button2' + '</button>' +
-    //           '<button type="button" role="button" tabindex="0" class="SwalBtn3 customSwalBtn">' + 'Button3' + '</button>',
-    //         showCancelButton: false,
-    //         showConfirmButton: false
-    //       });
-    //     });
-    //   });
   }
 
   button_callback_test(workspace_name: string) {
-    $(document).on('click', '.SwalBtn1', function () {
-      // Some code 1
-      console.log('Button 1');
-      swal.clickConfirm();
+    $(document).on('click', '.SwalBtn1', () => {
+      const ref = sessionStorage.getItem('user_name') + '/' + workspace_name;
+      this.firebaseService.database().ref(ref).once('value')
+        .then((dataSnapshot) => {
+          BlocksService.xml_string_to_workspace(dataSnapshot.val().workspace);
+        });
+      swal(
+        'Success!',
+        'Your workspace was loaded successfully',
+        'success'
+      ).then();
     });
-    $(document).on('click', '.SwalBtn2', function () {
-      // Some code 2
-      console.log('Button 2');
-      swal.clickConfirm();
+    $(document).on('click', '.SwalBtn2', () => {
+      this.delete_workspace(workspace_name).then();
+      swal(
+        'Success!',
+        'Workspace successfully deleted!',
+        'success'
+      ).then();
     });
-    $(document).on('click', '.SwalBtn3', function () {
-      // Some code 2
-      console.log('Button 3');
-      swal.clickConfirm();
+    $(document).on('click', '.SwalBtn3', () => {
+      swal({
+        title: 'Select Notification Intervals',
+        input: 'select',
+        inputOptions: {
+          'hourly': 'Hourly',
+          'daily': 'Daily',
+          'weekly': 'Weekly',
+          'monthly': 'Monthly'
+        },
+        inputPlaceholder: 'Select an Interval',
+        showCancelButton: true,
+        inputValidator: (value) => {
+          return new Promise(async (resolve) => {
+            if (!value) {
+              resolve('You must select an interval');
+            } else {
+              const db = this.firebaseService.database();
+              const user_name = sessionStorage.getItem('user_name');
+              const user_email = sessionStorage.getItem('user_email');
+              const note_ref_str = `auto notifications/${value}/${user_name}-${workspace_name}`;
+              const workspace_ref_str = `${user_name}/${workspace_name}`;
+
+              let keyword: string;
+              let count: string;
+              const ob = {
+                keyword: null,
+                count: null
+              };
+              db.ref(workspace_ref_str).once('value').then((dataSnapshot) => {
+                console.log('quried xml', dataSnapshot.val().workspace);
+                console.log('return val', BlocksService.xml_to_code(dataSnapshot.val().workspace));
+                const code = BlocksService.xml_to_code(dataSnapshot.val().workspace)
+                  .replace('?', '').replace('\n', '').replace(';', '').split('&');
+                console.log('code', code);
+                for (const pair of code) {
+                  const splitted = pair.split('=');
+                  console.log('split', splitted[0], splitted[1]);
+                  ob[splitted[0]] = splitted[1];
+                }
+                keyword = dataSnapshot.val().keyword;
+                count = dataSnapshot.val().count;
+              }).then(() => {
+                console.log(ob.keyword, ob.count);
+                db.ref(note_ref_str).set({
+                  keyword: ob.keyword,
+                  count: ob.count,
+                  email: user_email
+                }).then();
+              });
+              swal(
+                'Success!',
+                'Your notifications were successfully setup',
+                'success'
+              ).then(function() { resolve(); });
+            }
+          });
+        }
+      }).then();
     });
 
     swal({
@@ -147,8 +182,7 @@ export class BlocklyComponent implements OnInit {
           'Load Complete',
           'Your workspace was successfully loaded.',
           'success'
-        ).then(() => {
-        });
+        ).then();
       } else if (result.dismiss === swal.DismissReason.cancel) { // Read more about handling dismissals
         this.delete_workspace(workspace_name).then(() => {
         });
@@ -156,8 +190,7 @@ export class BlocklyComponent implements OnInit {
           'Deleted',
           'Your workspace was successfully deleted',
           'success'
-        ).then(() => {
-        });
+        ).then();
       }
     });
   }
@@ -206,8 +239,7 @@ export class BlocklyComponent implements OnInit {
       title: 'Your work has been deleted',
       showConfirmButton: false,
       timer: 1500
-    }).then(() => {
-    });
+    }).then();
   }
 
   @ViewChild(ResultDisplayComponent)
@@ -229,20 +261,5 @@ export class BlocklyComponent implements OnInit {
       error: err => console.log('cannot update, ', err),
       complete: () => console.log('query completed')
     });
-  }
-
-  swal3() {
-    // swal1({
-    //   type: 'warning',
-    //   title: 'numbers',
-    //   showCancelButton: true,
-    //   showAltActionButton: true,
-    //   confirmButtonColor: '#d33333',
-    //   cancelButtonColor: '#00417f',
-    //   altActionButtonColor: '#23c1c1',
-    //   altActionButtonText: 'One',
-    //   confirmButtonText: 'Two',
-    //   cancelButtonText: 'Three'
-    // })
   }
 }
