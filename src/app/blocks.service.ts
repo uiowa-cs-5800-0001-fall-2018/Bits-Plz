@@ -41,20 +41,20 @@ export class BlocksService {
 
   private static gen_blocks(): void {
     Blockly.Blocks['display'] = {
-      init: function () {
-        this.appendValueInput('d_display')
-          .setCheck(null)
-          .appendField('display:');
+      init: function() {
         this.appendDummyInput()
-          .appendField('display as')
-          .appendField(new Blockly.FieldDropdown([['bar chart', 'bar_chart']]), 'graph_type');
+          .setAlign(Blockly.ALIGN_CENTRE)
+          .appendField('DISPLAY');
         this.appendDummyInput()
-          .appendField('group by')
-          .appendField(new Blockly.FieldDropdown([['positive/negative', 'positive_and_negative']]), 'group_by_type');
-        this.setInputsInline(false);
-        this.setColour(230);
-        this.setTooltip('');
-        this.setHelpUrl('');
+          .appendField('display as:')
+          .appendField(new Blockly.FieldDropdown([['bar graph', 'bar'], ['pie chart', 'pie']]), 'graph_type');
+        this.appendDummyInput()
+          .appendField("group by:")
+          .appendField(new Blockly.FieldDropdown([['positive/negative', 'pos_neg']]), 'graph_content');
+        this.setOutput(true, null);
+        this.setColour(210);
+        this.setTooltip("");
+        this.setHelpUrl("");
       }
     };
 
@@ -95,11 +95,12 @@ export class BlocksService {
     };
 
     // Display Block generator.
-    Blockly.JavaScript['display'] = function (block) {
-      const text_t_input = block.getFieldValue('d_display');
-      // TODO: Assemble JavaScript into code variable.
-      const code = 'display-block: ' + text_t_input;
-      // TODO: Change ORDER_NONE to the correct strength.
+    Blockly.JavaScript['display'] = function(block) {
+      let dropdown_graph_type = block.getFieldValue('graph_type');
+      let dropdown_graph_content = block.getFieldValue('graph_content');
+      // Assemble JavaScript into code variable.
+      let code = '...';
+      // Change ORDER_NONE to the correct strength.
       return [code, Blockly.JavaScript.ORDER_NONE];
     };
 
