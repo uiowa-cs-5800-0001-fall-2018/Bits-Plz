@@ -1,9 +1,49 @@
-<div id="blocklyDiv" style="height: 50vh; width: 50%;" xmlns=""></div>
+<div id="blocklyDiv" style="height: 50vh; width: 60%;" xmlns=""></div>
 <button (click)="save_workspace()">Save My Workspace!</button>
 <button (click)="run_query()">Run Query!</button>
 <p>saved workspaces:</p>
 <span *ngFor="let btn of workspace_list" (click)="button_callback(btn.name)">
   <button>{{ btn.name }}</button>
 </span>
+
+<table id="customers">
+  <tr>
+    <th style="width: 95%; alignment: right">Content</th>
+    <th style="width: 5%; alignment: center">Score</th>
+  </tr>
+</table>
+<span *ngFor="let tweet of tweet_list">
+  <table id="customers">
+    <tr>
+      <th style="width: 95%">{{tweet.content}}</th>
+      <th style="width: 5%">{{tweet.score}}</th>
+    </tr>
+</table>
+</span>
+
 <p>auto notifications</p>
 <app-result-display></app-result-display>
+<style>
+  #customers {
+    font-family: "Trebuchet MS", Arial, Helvetica, sans-serif;
+    border-collapse: collapse;
+    width: 100%;
+  }
+
+  #customers td, #customers th {
+    border: 1px solid #ddd;
+    padding: 8px;
+  }
+
+  #customers tr:nth-child(even){background-color: #f2f2f2;}
+
+  #customers tr:hover {background-color: #ddd;}
+
+  #customers th {
+    padding-top: 12px;
+    padding-bottom: 12px;
+    text-align: left;
+    background-color: #3c74af;
+    color: white;
+  }
+</style>

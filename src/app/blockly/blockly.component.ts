@@ -8,6 +8,7 @@ import {BlocksService} from '../blocks.service';
 import swal from 'sweetalert2';
 import * as $ from 'jquery';
 import {Observable} from 'rxjs/Observable';
+import {forEach} from '@angular/router/src/utils/collection';
 
 
 @Component({
@@ -18,7 +19,8 @@ import {Observable} from 'rxjs/Observable';
 export class BlocklyComponent implements OnInit {
 
   resultDisplay;
-  workspace_list: { id, name }[];
+  workspace_list: {id, name}[];
+  tweet_list: {content, score}[];
   INVALID_NAME: 'Name entered was invalid';
   MSG_SUCCESS = 'Your work has been saved';
   NEED_LOGIN = 'you need to login first';
@@ -265,6 +267,22 @@ export class BlocklyComponent implements OnInit {
           distribution.negative,
           distribution.neutral
         );
+        this.tweet_list = [];
+        for (let i = 0; i < x.length; i++) {
+          console.log(x[i].content);
+          this.tweet_list.push( { 'content': x[i].content, 'score': x[i].score} );
+        }
+
+        function keysrt(key) {
+          return function(a, b) {
+            if (a[key] > b[key]) return 1;
+            if (a[key] < b[key]) return -1;
+            return 0;
+          }
+        }
+
+        this.tweet_list.sort(keysrt('score'));
+
       },
       error: err => console.log('cannot update, ', err),
       complete: () => console.log('query completed')

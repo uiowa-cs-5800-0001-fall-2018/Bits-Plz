@@ -15,9 +15,6 @@ export class ResultDisplayComponent implements OnInit {
   ngOnInit() {
     this.chart = echarts.init(document.getElementById('main'));
     this.chart.setOption({
-      title: {
-        text: 'Sentiment Analysis Results'
-      },
       tooltip: {},
       xAxis: {
         data: ['positive', 'negative', 'neutral']
