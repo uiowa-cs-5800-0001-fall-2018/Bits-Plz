@@ -79,7 +79,6 @@ export class BlocklyComponent implements OnInit {
             });
           }
         }).then(() => {
-          console.log(unsubscribed);
           if (!unsubscribed) {
             BlocklyComponent.swal_error('No unsubscription was made');
           } else {
@@ -229,15 +228,14 @@ export class BlocklyComponent implements OnInit {
                   ob[splitted[0]] = splitted[1];
                 }
               }).then(() => {
-                console.log(ob.keyword, ob.count);
                 db.ref(note_ref_str).set({
                   keyword: ob.keyword,
                   count: ob.count,
                   email: user_email
                 }).then();
+                BlocklyComponent.swal_notice('Your notifications were successfully setup').then(() => { resolve(); });
+                this.twitterService.sample_email(ob.keyword, ob.count, sessionStorage.getItem('user_email'));
               });
-              BlocklyComponent.swal_notice('Your notifications were successfully setup').then(() => { resolve(); });
-              this.twitterService.sample_email(ob.keyword, ob.count, sessionStorage.getItem('user_email'));
             }
           });
         }
@@ -271,7 +269,6 @@ export class BlocklyComponent implements OnInit {
         );
         this.tweet_list = [];
         for (let i = 0; i < x.length; i++) {
-          console.log(x[i].content);
           this.tweet_list.push( { 'content': x[i].content, 'score': x[i].score} );
         }
 
