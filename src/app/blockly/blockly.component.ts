@@ -56,7 +56,7 @@ export class BlocklyComponent implements OnInit {
   }
 
   private unsubscribe(name: string) {
-    let unsubscribed: any;
+    let unsubscribed: boolean;
     this.get_all_subscriptions(name).subscribe({
       next: intervals => {
         const input_options = {};
@@ -70,7 +70,7 @@ export class BlocklyComponent implements OnInit {
           inputPlaceholder: 'Select an interval to unsubscribe',
           showCancelButton: true,
           inputValidator: value => {
-            unsubscribed = value;
+            unsubscribed = value === 'Select an interval to unsubscribe';
             return new Promise((resolve) => {
               this.firebaseService.database().
                 ref(`auto notifications/${value}/${sessionStorage.getItem('user_name')}-${name}`)
@@ -79,8 +79,7 @@ export class BlocklyComponent implements OnInit {
             });
           }
         }).then(() => {
-          console.log(unsubscribed);
-          if (!unsubscribed) {
+          if (unsubscribed) {
             BlocklyComponent.swal_error('No unsubscription was made');
           } else {
             BlocklyComponent.swal_notice('Successfully Unsubscribed');
